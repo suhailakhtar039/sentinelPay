@@ -1,3 +1,14 @@
+server:
+  port: 8081
+
 spring:
-  application:
-    name: Authorization-Service
+  datasource:
+    url: jdbc:mysql://localhost:3306/sentinelpay
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
