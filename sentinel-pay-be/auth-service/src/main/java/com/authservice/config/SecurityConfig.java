@@ -26,7 +26,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // Whitelist
-                        .requestMatchers("/api/auth/register/**", "/api/authn/login/**").permitAll()
+                        .requestMatchers("/api/auth/register/**", "/api/auth/login/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // JwtFilter
