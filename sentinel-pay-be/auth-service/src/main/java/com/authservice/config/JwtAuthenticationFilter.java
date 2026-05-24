@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (null == authHeader || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
+            return;
         }
         String token = authHeader.substring(7);
         // Get username
@@ -42,14 +43,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         ) {
             boolean isValid = jwtService.validateToken(token, username);
             if (isValid) {
+                String role = jwtService.extractRole(token);
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 username,
                                 null,
                                 List.of(
-                                        new SimpleGrantedAuthority(
-                                                "ROLE_USER"
-                                        )
+                                        new SimpleGrantedAuthority(role)
                                 )
                         );
 
