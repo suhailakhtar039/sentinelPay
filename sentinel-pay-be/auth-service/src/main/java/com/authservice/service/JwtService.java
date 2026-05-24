@@ -1,5 +1,6 @@
 package com.authservice.service;
 
+import com.authservice.dto.RoleEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,7 +18,7 @@ public class JwtService {
     private SecretKey secretKey;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         secretKey = Keys.hmacShaKeyFor(KEY.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -25,11 +26,12 @@ public class JwtService {
      * Generate token with the help of username only.
      * Take care of claims thoroughly
      */
-    public String generateToken(String username){
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", RoleEnum.ROLE_USER.name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 60*60*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -37,7 +39,7 @@ public class JwtService {
     /**
      * Validate token. Check username and expiration date.
      */
-    public boolean validateToken(String token, String username){
+    public boolean validateToken(String token, String username) {
         String extractedUsername = extractUsername(token);
         return extractedUsername.equals(username) && !isTokenExpired(token);
     }
@@ -45,16 +47,28 @@ public class JwtService {
     /**
      * Extract username. Username is subject in all cases
      */
-    public String extractUsername(String token){
+    public String extractUsername(String token) {
         Claims claims = extractAllClaims(token);
         return claims.getSubject();
     }
 
+    /**
+     * Extract role
+     */
+    public String extractRole(
+            String token
+    ) {
+
+        Claims claims =
+                extractAllClaims(token);
+
+        return claims.get("role", String.class);
+    }
 
     /**
      * Check expiration of token
      */
-    private boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token) {
         Claims claims = extractAllClaims(token);
         return claims.getExpiration()
                 .before(new Date());
@@ -63,7 +77,7 @@ public class JwtService {
     /**
      * extract all claims to avoid reusability
      */
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
