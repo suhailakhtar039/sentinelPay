@@ -1,5 +1,7 @@
 package com.authservice.controller;
 
+import com.authservice.dto.LoginRequest;
+import com.authservice.dto.LoginResponse;
 import com.authservice.dto.RegisterRequest;
 import com.authservice.dto.RegisterResponse;
 import com.authservice.service.AuthorizationService;
@@ -20,5 +22,10 @@ public class AuthorizationController {
     @PostMapping("register")
     public ResponseEntity<RegisterResponse> registerNewUser(@RequestBody RegisterRequest request){
         return new ResponseEntity<>(service.register(request), HttpStatus.OK);
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
+        return new ResponseEntity<>(service.login(loginRequest), HttpStatus.OK);
     }
 }
