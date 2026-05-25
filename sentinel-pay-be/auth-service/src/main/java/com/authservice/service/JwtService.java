@@ -1,6 +1,7 @@
 package com.authservice.service;
 
 import com.authservice.dto.RoleEnum;
+import com.authservice.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,10 +27,11 @@ public class JwtService {
      * Generate token with the help of username only.
      * Take care of claims thoroughly
      */
-    public String generateToken(String username) {
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(username)
-                .claim("role", RoleEnum.ROLE_USER.name())
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole().name())
+                .claim("userId",user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
