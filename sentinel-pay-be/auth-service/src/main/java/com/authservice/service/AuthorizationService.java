@@ -1,5 +1,6 @@
 package com.authservice.service;
 
+import com.authservice.client.WalletClient;
 import com.authservice.dto.LoginRequest;
 import com.authservice.dto.LoginResponse;
 import com.authservice.dto.RegisterRequest;
@@ -10,6 +11,7 @@ import com.authservice.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +19,9 @@ public class AuthorizationService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final WalletClient walletClient;
 
+    @Transactional
     public RegisterResponse register(RegisterRequest request){
         RegisterResponse response = new RegisterResponse();
 
@@ -26,7 +30,8 @@ public class AuthorizationService {
         user.setName(request.getName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleEnum.ROLE_USER);
-        userRepo.save(user);
+        User savedUser = userRepo.save(user);
+        walletClient.createWallet(savedUser.getId());
         response.setMessage("User registered successfully");
         return response;
     }
