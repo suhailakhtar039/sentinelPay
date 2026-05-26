@@ -1,0 +1,59 @@
+package com.walletservice.service.impl;
+
+import com.walletservice.dto.CreateWalletRequest;
+import com.walletservice.dto.WalletResponse;
+import com.walletservice.entity.Wallet;
+import com.walletservice.enums.WalletStatus;
+import com.walletservice.exception.BadRequestException;
+import com.walletservice.exception.ResourceNotFoundException;
+import com.walletservice.repository.WalletRepository;
+import com.walletservice.service.WalletService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class WalletServiceImpl implements WalletService {
+    private final WalletRepository repository;
+
+    @Override
+    public WalletResponse createWallet(CreateWalletRequest request) {
+        boolean exists = repository.existsByUserId(request.getUserId());
+        if (exists) {
+            throw new BadRequestException("Wallet already exists for user");
+        }
+        Wallet wallet = Wallet.builder()
+                .userId(request.getUserId())
+                .balance(BigDecimal.ZERO)
+                .currency("INR")
+                .status(WalletStatus.ACTIVE)
+                .build();
+        repository.save(wallet);
+        log.info("Wallet created for user id {}", request.getUserId());
+        return WalletResponse.builder()
+                .walletId(wallet.getWalletId())
+                .balance(wallet.getBalance())
+                .userId(wallet.getUserId())
+                .currency(wallet.getCurrency())
+                .status(wallet.getStatus().name())
+                .build();
+    }
+
+    @Override
+    public WalletResponse getWalletByUserId(Long userId) {
+        Wallet wallet = repository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found"));
+
+        return WalletResponse.builder()
+                .walletId(wallet.getWalletId())
+                .userId(wallet.getUserId())
+                .balance(wallet.getBalance())
+                .currency(wallet.getCurrency())
+                .status(wallet.getStatus().name())
+                .build();
+    }
+}
