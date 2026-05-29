@@ -7,6 +7,8 @@ spring:
     username: root
     password: suhail
     driver-class-name: com.mysql.cj.jdbc.Driver
+  kafka:
+    bootstrap-servers: localhost:9092
 
   jpa:
     hibernate:
