@@ -7,6 +7,8 @@ import com.authservice.dto.RegisterRequest;
 import com.authservice.dto.RegisterResponse;
 import com.authservice.dto.RoleEnum;
 import com.authservice.entity.User;
+import com.authservice.event.UserRegisteredEvent;
+import com.authservice.kafka.UserEventProducer;
 import com.authservice.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +22,10 @@ public class AuthorizationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final WalletClient walletClient;
+    private final UserEventProducer userEventProducer;
 
     @Transactional
-    public RegisterResponse register(RegisterRequest request){
+    public RegisterResponse register(RegisterRequest request) {
         RegisterResponse response = new RegisterResponse();
 
         User user = new User();
@@ -31,7 +34,14 @@ public class AuthorizationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleEnum.ROLE_USER);
         User savedUser = userRepo.save(user);
-        walletClient.createWallet(savedUser.getId());
+        UserRegisteredEvent event = UserRegisteredEvent
+                .builder()
+                .userId(savedUser.getId())
+                .email(savedUser.getEmail())
+                .name(savedUser.getName())
+                .build();
+//        walletClient.createWallet(savedUser.getId());
+        userEventProducer.publishUserRegisteredEvent(event);
         response.setMessage("User registered successfully");
         return response;
     }
@@ -42,12 +52,12 @@ public class AuthorizationService {
 
         User user = userRepo
                 .findByEmail(email)
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new RuntimeException("User with email " + email + " is not found"));
         boolean passwordMatch =
                 passwordEncoder.matches(password, user.getPassword());
 
-        if(!passwordMatch){
+        if (!passwordMatch) {
             throw new RuntimeException("Invalid credentials");
         }
 
