@@ -13,6 +13,8 @@ import lombok.Setter;
 @Builder
 public class UserRegisteredEvent {
 
+    private String correlationID;
+
     private Long userId;
 
     private String email;

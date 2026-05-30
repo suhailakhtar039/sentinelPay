@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserRegisteredEvent {
 
+    private String correlationID;
+
     private Long userId;
 
     private String email;
