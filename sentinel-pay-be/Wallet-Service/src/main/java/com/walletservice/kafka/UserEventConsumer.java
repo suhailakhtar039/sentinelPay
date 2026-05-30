@@ -15,13 +15,13 @@ public class UserEventConsumer {
     private final WalletService walletService;
 
     @KafkaListener(topics = KafkaTopics.USER_REGISTERED, groupId = "wallet-group")
-    public void consumeUserRegisteredEvent(UserRegisteredEvent event) {
+    public void consume(UserRegisteredEvent event) {
         log.info("Received USER_REGISTERED event for userId:{}", event.getUserId());
-        CreateWalletRequest request = CreateWalletRequest.builder()
-                .userId(event.getUserId())
-                .build();
+//        CreateWalletRequest request = CreateWalletRequest.builder()
+//                .userId(event.getUserId())
+//                .build();
 
-        walletService.createWallet(request);
+        walletService.createWalletIfNotExists(event.getUserId());
     }
 
 }
