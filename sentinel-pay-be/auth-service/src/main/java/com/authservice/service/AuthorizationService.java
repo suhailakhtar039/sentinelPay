@@ -7,13 +7,15 @@ import com.authservice.dto.RegisterRequest;
 import com.authservice.dto.RegisterResponse;
 import com.authservice.dto.RoleEnum;
 import com.authservice.entity.User;
-import com.authservice.event.UserRegisteredEvent;
 import com.authservice.kafka.UserEventProducer;
 import com.authservice.repository.UserRepo;
+import com.sentinelpay.common.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +36,11 @@ public class AuthorizationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleEnum.ROLE_USER);
         User savedUser = userRepo.save(user);
+
+        String correlationId = UUID.randomUUID().toString();
         UserRegisteredEvent event = UserRegisteredEvent
                 .builder()
+                .correlationID(correlationId)
                 .userId(savedUser.getId())
                 .email(savedUser.getEmail())
                 .name(savedUser.getName())
