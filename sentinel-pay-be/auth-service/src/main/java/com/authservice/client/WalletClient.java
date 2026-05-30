@@ -2,7 +2,7 @@ package com.authservice.client;
 
 import com.authservice.dto.wallet.CreateWalletRequest;
 import com.authservice.dto.wallet.WalletResponse;
-import com.authservice.response.ApiResponse;
+import com.sentinelpay.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;

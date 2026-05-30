@@ -27,7 +27,7 @@ public class WalletServiceImpl implements WalletService {
         boolean exists = repository.existsByUserId(userId);
         if (exists) {
             log.info("Wallet already exists for user {}", userId);
-            throw new BadRequestException("Wallet already exists for user");
+//            throw new BadRequestException("Wallet already exists for user");
         }
         Wallet wallet = Wallet.builder()
                 .userId(userId)

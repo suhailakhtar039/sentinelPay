@@ -1,8 +1,8 @@
 package com.walletservice.controller;
 
+import com.sentinelpay.common.response.ApiResponse;
 import com.walletservice.dto.CreateWalletRequest;
 import com.walletservice.dto.WalletResponse;
-import com.walletservice.response.ApiResponse;
 import com.walletservice.service.WalletService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,14 @@ public class WalletController {
     private final WalletService service;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<WalletResponse>> createWallet(
+    public ResponseEntity<ApiResponse<String>> createWallet(
             @Valid @RequestBody CreateWalletRequest request
     ) {
-        WalletResponse response = service.createWallet(request);
+        service.createWalletIfNotExists(request.getUserId());
         return ResponseEntity.ok(
-                ApiResponse.<WalletResponse>builder()
+                ApiResponse.<String>builder()
                         .success(true)
-                        .data(response)
+                        .data("Wallet Created Successfully!")
                         .timestamp(LocalDateTime.now())
                         .build()
         );

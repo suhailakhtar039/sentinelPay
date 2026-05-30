@@ -1,7 +1,7 @@
 package com.walletservice.kafka;
 
-import com.walletservice.dto.CreateWalletRequest;
-import com.walletservice.event.UserRegisteredEvent;
+import com.sentinelpay.common.event.UserRegisteredEvent;
+import com.sentinelpay.common.kafka.KafkaTopics;
 import com.walletservice.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

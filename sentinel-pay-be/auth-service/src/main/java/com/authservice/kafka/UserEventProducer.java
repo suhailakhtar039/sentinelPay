@@ -1,6 +1,7 @@
 package com.authservice.kafka;
 
-import com.authservice.event.UserRegisteredEvent;
+import com.sentinelpay.common.event.UserRegisteredEvent;
+import com.sentinelpay.common.kafka.KafkaTopics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
