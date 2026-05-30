@@ -4,4 +4,7 @@ public class KafkaTopics {
 
     public static final String USER_REGISTERED =
             "user.registered";
+
+    public static final String USER_REGISTERED_DLT =
+            "user.registered.dlt";
 }
