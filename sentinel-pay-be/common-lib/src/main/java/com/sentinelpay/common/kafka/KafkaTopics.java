@@ -1,4 +1,4 @@
-package com.walletservice.kafka;
+package com.sentinelpay.common.kafka;
 
 public class KafkaTopics {
 
