@@ -1,4 +1,4 @@
-package com.authservice.response;
+package com.sentinelpay.common.response;
 
 import lombok.Builder;
 import lombok.Data;
