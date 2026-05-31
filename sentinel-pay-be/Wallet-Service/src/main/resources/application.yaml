@@ -32,7 +32,7 @@ spring:
               packages: "*"
             value:
               default:
-                type: com.walletservice.event.UserRegisteredEvent
+                type: com.sentinelpay.common.event.UserRegisteredEvent
             use:
               type:
                 headers: false
