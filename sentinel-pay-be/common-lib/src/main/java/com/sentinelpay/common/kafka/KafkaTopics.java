@@ -7,4 +7,6 @@ public class KafkaTopics {
 
     public static final String USER_REGISTERED_DLT =
             "user.registered.dlt";
+    public static final String PAYMENT_INITIATED =
+            "payment.initiated";
 }
