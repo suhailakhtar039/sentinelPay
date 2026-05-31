@@ -1,11 +1,9 @@
 package com.walletservice.service.impl;
 
-import com.walletservice.dto.CreateWalletRequest;
+import com.sentinelpay.common.exception.ResourceNotFoundException;
 import com.walletservice.dto.WalletResponse;
 import com.walletservice.entity.Wallet;
 import com.walletservice.enums.WalletStatus;
-import com.walletservice.exception.BadRequestException;
-import com.walletservice.exception.ResourceNotFoundException;
 import com.walletservice.repository.WalletRepository;
 import com.walletservice.service.WalletService;
 import lombok.RequiredArgsConstructor;
