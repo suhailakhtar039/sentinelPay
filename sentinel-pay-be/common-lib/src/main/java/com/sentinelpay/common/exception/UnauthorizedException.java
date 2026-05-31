@@ -1,4 +1,4 @@
-package com.authservice.exception;
+package com.sentinelpay.common.exception;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String message) {
