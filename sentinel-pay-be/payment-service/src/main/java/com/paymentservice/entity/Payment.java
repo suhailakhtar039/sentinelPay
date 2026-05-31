@@ -39,4 +39,5 @@ public class Payment {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    private Long receiverUserId;
 }
