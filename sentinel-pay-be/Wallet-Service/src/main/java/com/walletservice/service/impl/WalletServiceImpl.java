@@ -1,6 +1,8 @@
 package com.walletservice.service.impl;
 
+import com.sentinelpay.common.exception.BadRequestException;
 import com.sentinelpay.common.exception.ResourceNotFoundException;
+import com.sentinelpay.common.exception.WalletNotFoundException;
 import com.walletservice.dto.WalletResponse;
 import com.walletservice.entity.Wallet;
 import com.walletservice.enums.WalletStatus;
@@ -57,4 +59,29 @@ public class WalletServiceImpl implements WalletService {
                 .status(wallet.getStatus().name())
                 .build();
     }
+
+    @Override
+    @Transactional
+    public void debit(Long userId, BigDecimal amount) {
+        Wallet wallet = repository.findByUserId(userId)
+                .orElseThrow(() ->
+                        new WalletNotFoundException("Wallet with user id " + userId + " not found in debit"));
+
+        if (wallet.getBalance().compareTo(amount) < 0) {
+            throw new BadRequestException("Insufficient Balance");
+        }
+        wallet.setBalance(wallet.getBalance().subtract(amount));
+    }
+
+    @Override
+    @Transactional
+    public void credit(Long userId, BigDecimal amount) {
+        Wallet wallet = repository.findByUserId(userId)
+                .orElseThrow(() ->
+                        new WalletNotFoundException("Wallet with user id " + userId + " not found in credit"));
+
+        wallet.setBalance(wallet.getBalance().add(amount));
+
+    }
+
 }
