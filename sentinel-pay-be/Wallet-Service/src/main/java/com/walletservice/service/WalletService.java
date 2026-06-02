@@ -1,6 +1,5 @@
 package com.walletservice.service;
 
-import com.walletservice.dto.CreateWalletRequest;
 import com.walletservice.dto.WalletResponse;
 
 import java.math.BigDecimal;
