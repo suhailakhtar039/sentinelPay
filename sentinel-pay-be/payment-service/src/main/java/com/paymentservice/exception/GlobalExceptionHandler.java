@@ -2,6 +2,7 @@ package com.paymentservice.exception;
 
 import com.sentinelpay.common.exception.BadRequestException;
 import com.sentinelpay.common.exception.ErrorDto;
+import com.sentinelpay.common.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,19 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorDto);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleResourceNotFound(
+            ResourceNotFoundException exception,
+            HttpServletRequest request
+            ){
+        ErrorDto response = ErrorDto.builder()
+                .message(exception.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
