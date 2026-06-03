@@ -15,4 +15,10 @@ public class KafkaTopics {
 
     public static final String PAYMENT_FAILED =
             "payment.failed";
+
+    public static final String FRAUD_APPROVED =
+            "fraud-approved";
+
+    public static final String FRAUD_REJECTED =
+            "fraud-rejected";
 }
