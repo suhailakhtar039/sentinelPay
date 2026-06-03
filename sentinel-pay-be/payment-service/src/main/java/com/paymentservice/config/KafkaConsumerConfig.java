@@ -26,13 +26,10 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, PaymentCompletedEvent>
-    paymentCompletedConsumerFactory() {
+    public ConsumerFactory<String, Object> consumerFactory() {
 
-        JsonDeserializer<PaymentCompletedEvent> deserializer =
-                new JsonDeserializer<>(
-                        PaymentCompletedEvent.class
-                );
+        JsonDeserializer<Object> deserializer =
+                new JsonDeserializer<>();
 
         deserializer.addTrustedPackages("*");
 
@@ -56,18 +53,15 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<
-            String,
-            PaymentCompletedEvent>
-    paymentCompletedKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Object>
+    kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<
-                        String,
-                        PaymentCompletedEvent> factory =
+        ConcurrentKafkaListenerContainerFactory<String, Object>
+                factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(
-                paymentCompletedConsumerFactory()
+                consumerFactory()
         );
 
         return factory;
