@@ -1,6 +1,7 @@
 package com.paymentservice.entity;
 
 import com.paymentservice.enums.PaymentStatus;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -40,4 +41,7 @@ public class Payment {
     private LocalDateTime createdAt;
 
     private Long receiverUserId;
+
+    @Column(length = 255)
+    private String failureReason;
 }
