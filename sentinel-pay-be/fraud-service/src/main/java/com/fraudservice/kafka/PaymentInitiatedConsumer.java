@@ -1,6 +1,8 @@
 package com.fraudservice.kafka;
 
 import com.fraudservice.service.FraudDetectionService;
+import com.sentinelpay.common.event.FraudApprovedEvent;
+import com.sentinelpay.common.event.FraudRejectedEvent;
 import com.sentinelpay.common.event.PaymentInitiatedEvent;
 import com.sentinelpay.common.kafka.KafkaTopics;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +15,35 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PaymentInitiatedConsumer {
     private final FraudDetectionService fraudDetectionService;
+    private final FraudEventProducer fraudEventProducer;
 
     @KafkaListener(topics = KafkaTopics.PAYMENT_INITIATED, groupId = "fraud-service")
     public void consume(PaymentInitiatedEvent event) {
         boolean fraudulent = fraudDetectionService.isFraudulent(event);
-        if (fraudulent)
-            log.info("Fraud occurred");
-        else log.info("Fraud not occurred");
+        if (fraudulent) {
+            FraudRejectedEvent rejectedEvent = FraudRejectedEvent.builder()
+                    .paymentId(event.getPaymentId())
+                    .reason("Transaction amount exceeds limits")
+                    .build();
+
+            fraudEventProducer.publishRejected(rejectedEvent);
+            log.info(
+                    "Payment {} rejected by fraud service",
+                    event.getPaymentId()
+            );
+        } else {
+            FraudApprovedEvent approvedEvent = FraudApprovedEvent.builder()
+                    .paymentId(event.getPaymentId())
+                    .senderUserId(event.getSenderUserId())
+                    .receiverUserId(event.getReceiverUserId())
+                    .amount(event.getAmount())
+                    .build();
+            fraudEventProducer.publishApproval(approvedEvent);
+            log.info(
+                    "Payment {} approved by fraud service",
+                    event.getPaymentId()
+            );
+        }
     }
 
 }
