@@ -1,5 +1,6 @@
 package com.fraudservice.kafka;
 
+import com.fraudservice.dto.FraudDecision;
 import com.fraudservice.service.FraudDetectionService;
 import com.sentinelpay.common.event.FraudApprovedEvent;
 import com.sentinelpay.common.event.FraudRejectedEvent;
@@ -19,11 +20,11 @@ public class PaymentInitiatedConsumer {
 
     @KafkaListener(topics = KafkaTopics.PAYMENT_INITIATED, groupId = "fraud-service")
     public void consume(PaymentInitiatedEvent event) {
-        boolean fraudulent = fraudDetectionService.isFraudulent(event);
-        if (fraudulent) {
+        FraudDecision fraudulent = fraudDetectionService.evaluate(event);
+        if (fraudulent.isFraudulent()) {
             FraudRejectedEvent rejectedEvent = FraudRejectedEvent.builder()
                     .paymentId(event.getPaymentId())
-                    .reason("Transaction amount exceeds limits")
+                    .reason(fraudulent.getReason())
                     .build();
 
             fraudEventProducer.publishRejected(rejectedEvent);
