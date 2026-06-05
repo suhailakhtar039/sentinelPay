@@ -21,16 +21,7 @@ public class FraudApprovedConsumer {
     public void consume(FraudApprovedEvent event) {
 
         try {
-            walletService.debit(event.getSenderUserId(), event.getAmount());
-
-            walletService.credit(event.getReceiverUserId(), event.getAmount());
-
-            walletEventProducer.publishPaymentCompleted(PaymentCompletedEvent.builder()
-                    .paymentId(event.getPaymentId())
-                    .senderUserId(event.getSenderUserId())
-                    .receiverUserId(event.getReceiverUserId())
-                    .build()
-            );
+            walletService.processApprovedPayment(event);
         } catch (Exception e){
             walletEventProducer.publishPaymentFailed(PaymentFailedEvent.builder()
                     .paymentId(event.getPaymentId())
