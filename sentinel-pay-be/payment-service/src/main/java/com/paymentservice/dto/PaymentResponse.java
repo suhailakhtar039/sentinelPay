@@ -25,4 +25,6 @@ public class PaymentResponse {
 
     private LocalDateTime createdAt;
 
+    private String failureReason;
+
 }
