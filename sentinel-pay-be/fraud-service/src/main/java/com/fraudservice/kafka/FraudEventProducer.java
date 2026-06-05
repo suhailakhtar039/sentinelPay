@@ -2,7 +2,6 @@ package com.fraudservice.kafka;
 
 import com.sentinelpay.common.event.FraudApprovedEvent;
 import com.sentinelpay.common.event.FraudRejectedEvent;
-import com.sentinelpay.common.event.PaymentFailedEvent;
 import com.sentinelpay.common.kafka.KafkaTopics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
