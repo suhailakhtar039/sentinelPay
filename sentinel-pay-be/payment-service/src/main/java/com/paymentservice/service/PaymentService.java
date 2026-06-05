@@ -52,14 +52,7 @@ public class PaymentService {
 
         paymentEventProducer.publishPaymentInitiated(event);
 
-        return PaymentResponse.builder()
-                .paymentId(savedPayment.getPaymentId())
-                .senderUserId(savedPayment.getSenderUserId())
-                .receiverUserId(savedPayment.getReceiverUserId())
-                .amount(savedPayment.getAmount())
-                .status(savedPayment.getStatus())
-                .createdAt(savedPayment.getCreatedAt())
-                .build();
+        return mapToResponse(savedPayment);
 
     }
 
@@ -67,15 +60,19 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Payment with id " + paymentId + " is not present"));
-        PaymentResponse response = PaymentResponse.builder()
+        return mapToResponse(payment);
+    }
+
+    private PaymentResponse mapToResponse(Payment payment){
+        return PaymentResponse.builder()
                 .paymentId(payment.getPaymentId())
                 .senderUserId(payment.getSenderUserId())
                 .receiverUserId(payment.getReceiverUserId())
                 .amount(payment.getAmount())
                 .status(payment.getStatus())
+                .failureReason(payment.getFailureReason())
                 .createdAt(payment.getCreatedAt())
                 .build();
-        return response;
     }
 
 }
