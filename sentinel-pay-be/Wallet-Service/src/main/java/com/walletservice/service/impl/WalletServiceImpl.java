@@ -1,11 +1,14 @@
 package com.walletservice.service.impl;
 
+import com.sentinelpay.common.event.FraudApprovedEvent;
+import com.sentinelpay.common.event.PaymentCompletedEvent;
 import com.sentinelpay.common.exception.BadRequestException;
 import com.sentinelpay.common.exception.ResourceNotFoundException;
 import com.sentinelpay.common.exception.WalletNotFoundException;
 import com.walletservice.dto.WalletResponse;
 import com.walletservice.entity.Wallet;
 import com.walletservice.enums.WalletStatus;
+import com.walletservice.kafka.WalletEventProducer;
 import com.walletservice.repository.WalletRepository;
 import com.walletservice.service.WalletService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import java.math.BigDecimal;
 @Slf4j
 public class WalletServiceImpl implements WalletService {
     private final WalletRepository repository;
+    private final WalletEventProducer walletEventProducer;
 
     @Override
     @Transactional
@@ -82,6 +86,21 @@ public class WalletServiceImpl implements WalletService {
 
         wallet.setBalance(wallet.getBalance().add(amount));
 
+    }
+
+    @Transactional
+    @Override
+    public void processApprovedPayment(FraudApprovedEvent event) {
+        debit(event.getSenderUserId(), event.getAmount());
+        credit(event.getReceiverUserId(), event.getAmount());
+
+        PaymentCompletedEvent paymentCompletedEvent = PaymentCompletedEvent.builder()
+                .paymentId(event.getPaymentId())
+                .senderUserId(event.getSenderUserId())
+                .receiverUserId(event.getReceiverUserId())
+                .build();
+
+        walletEventProducer.publishPaymentCompleted(paymentCompletedEvent);
     }
 
 }
