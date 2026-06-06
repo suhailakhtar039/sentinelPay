@@ -9,6 +9,7 @@ import com.authservice.dto.RoleEnum;
 import com.authservice.entity.User;
 import com.authservice.kafka.UserEventProducer;
 import com.authservice.repository.UserRepo;
+import com.sentinelpay.common.dto.TokenValidationResponse;
 import com.sentinelpay.common.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,10 +67,28 @@ public class AuthorizationService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name());
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setEmail(email);
+        loginResponse.setUserId(user.getId());
+        loginResponse.setEmail(user.getEmail());
+        loginResponse.setRole(user.getRole().name());
         loginResponse.setToken(token);
         return loginResponse;
+    }
+
+    public TokenValidationResponse validateToken(String token) {
+        String email = jwtService.extractUsername(token);
+        Long userId = jwtService.extractUserId(token);
+        String role = jwtService.extractRole(token);
+
+        boolean valid =
+                jwtService.validateToken(token, email);
+
+        return TokenValidationResponse.builder()
+                .valid(valid)
+                .email(email)
+                .userId(userId)
+                .role(role)
+                .build();
     }
 }
