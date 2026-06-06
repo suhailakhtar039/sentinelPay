@@ -1,12 +1,10 @@
 package com.authservice.service;
 
-import com.authservice.dto.RoleEnum;
-import com.authservice.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -15,27 +13,33 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final String KEY = "mySuperSecretKeyForJwtToken123456";
     private SecretKey secretKey;
 
-    @PostConstruct
-    public void init() {
-        secretKey = Keys.hmacShaKeyFor(KEY.getBytes(StandardCharsets.UTF_8));
+    public JwtService(
+            @Value("${jwt.secret}")
+            String secret
+    ) {
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
      * Generate token with the help of username only.
      * Take care of claims thoroughly
      */
-    public String generateToken(User user) {
+    public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
-                .setSubject(user.getEmail())
-                .claim("role", user.getRole().name())
-                .claim("userId",user.getId())
+                .setSubject(email)
+                .claim("role", role)
+                .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Long extractUserId(String token) {
+        return extractAllClaims(token)
+                .get("userId", Long.class);
     }
 
     /**
