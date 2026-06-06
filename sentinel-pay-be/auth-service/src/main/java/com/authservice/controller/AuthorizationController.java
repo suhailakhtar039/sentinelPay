@@ -5,6 +5,8 @@ import com.authservice.dto.LoginResponse;
 import com.authservice.dto.RegisterRequest;
 import com.authservice.dto.RegisterResponse;
 import com.authservice.service.AuthorizationService;
+import com.sentinelpay.common.dto.TokenValidationRequest;
+import com.sentinelpay.common.dto.TokenValidationResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,12 +23,20 @@ public class AuthorizationController {
     private final AuthorizationService service;
 
     @PostMapping("register")
-    public ResponseEntity<RegisterResponse> registerNewUser(@Valid @RequestBody RegisterRequest request){
+    public ResponseEntity<RegisterResponse> registerNewUser(@Valid @RequestBody RegisterRequest request) {
         return new ResponseEntity<>(service.register(request), HttpStatus.OK);
     }
 
     @PostMapping("login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         return new ResponseEntity<>(service.login(loginRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("validate")
+    public ResponseEntity<TokenValidationResponse> validate(
+            @RequestBody TokenValidationRequest request
+    ) {
+        return new ResponseEntity<>(service.validateToken(request.getToken()),
+                HttpStatus.OK);
     }
 }
