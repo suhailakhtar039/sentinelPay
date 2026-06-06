@@ -98,6 +98,8 @@ public class WalletServiceImpl implements WalletService {
                 .paymentId(event.getPaymentId())
                 .senderUserId(event.getSenderUserId())
                 .receiverUserId(event.getReceiverUserId())
+                .amount(event.getAmount())
+                .currency("INR")
                 .build();
 
         walletEventProducer.publishPaymentCompleted(paymentCompletedEvent);
