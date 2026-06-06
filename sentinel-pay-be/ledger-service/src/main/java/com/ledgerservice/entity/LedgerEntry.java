@@ -1,7 +1,10 @@
 package com.ledgerservice.entity;
 
+import com.ledgerservice.entity.enums.LedgerStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -40,6 +44,12 @@ public class LedgerEntry {
     @Column(nullable = false, length = 3)
     private String currency;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private LedgerStatus status;
+
+    private String remarks;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime transactionTime;
 }
