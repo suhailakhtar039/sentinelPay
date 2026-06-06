@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,4 +19,7 @@ public class PaymentCompletedEvent {
 
     private Long receiverUserId;
 
+    private BigDecimal amount;
+
+    private String currency;
 }
