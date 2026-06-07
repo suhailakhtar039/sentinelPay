@@ -53,7 +53,7 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public WalletResponse getWalletByUserId(Long userId) {
         Wallet wallet = repository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found"));
+                .orElseThrow(() -> new WalletNotFoundException("Wallet Not Found"));
 
         return WalletResponse.builder()
                 .walletId(wallet.getWalletId())
