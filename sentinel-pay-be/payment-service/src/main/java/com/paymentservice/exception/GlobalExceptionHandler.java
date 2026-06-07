@@ -1,5 +1,6 @@
 package com.paymentservice.exception;
 
+import com.sentinelpay.common.exception.AccessDeniedException;
 import com.sentinelpay.common.exception.BadRequestException;
 import com.sentinelpay.common.exception.ErrorDto;
 import com.sentinelpay.common.exception.ResourceNotFoundException;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDto> handleResourceNotFound(
             ResourceNotFoundException exception,
             HttpServletRequest request
-            ){
+    ) {
         ErrorDto response = ErrorDto.builder()
                 .message(exception.getMessage())
                 .path(request.getRequestURI())
@@ -41,5 +42,19 @@ public class GlobalExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDto> handleAccessDeniedException(
+            AccessDeniedException ex,
+            HttpServletRequest request
+    ) {
+        ErrorDto response = ErrorDto.builder()
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 }
