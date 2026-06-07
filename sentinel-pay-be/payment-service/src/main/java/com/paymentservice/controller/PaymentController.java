@@ -42,9 +42,10 @@ public class PaymentController {
 
     @GetMapping("/{paymentId}")
     public ResponseEntity<ApiResponse<PaymentResponse>> getPayment(
+            @RequestHeader("X-User-Id") Long userId,
             @PathVariable Long paymentId
     ) {
-        PaymentResponse response = paymentService.getPayment(paymentId);
+        PaymentResponse response = paymentService.getPayment(paymentId, userId);
         return ResponseEntity.ok(
                 ApiResponse.<PaymentResponse>builder()
                         .success(true)

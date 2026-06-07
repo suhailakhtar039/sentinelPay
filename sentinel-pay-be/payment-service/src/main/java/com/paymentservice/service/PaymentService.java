@@ -7,6 +7,7 @@ import com.paymentservice.enums.PaymentStatus;
 import com.paymentservice.kafka.PaymentEventProducer;
 import com.paymentservice.repository.PaymentRepository;
 import com.sentinelpay.common.event.PaymentInitiatedEvent;
+import com.sentinelpay.common.exception.AccessDeniedException;
 import com.sentinelpay.common.exception.BadRequestException;
 import com.sentinelpay.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -56,10 +57,28 @@ public class PaymentService {
 
     }
 
-    public PaymentResponse getPayment(Long paymentId){
+    public PaymentResponse getPayment(Long paymentId, Long userId) {
+
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Payment with id " + paymentId + " is not present"));
+                        new ResourceNotFoundException(
+                                "Payment with id " + paymentId + " is not present"));
+
+        System.out.println("Logged User = " + userId);
+        System.out.println("Sender = " + payment.getSenderUserId());
+        System.out.println("Receiver = " + payment.getReceiverUserId());
+
+        boolean isOwner =
+                payment.getSenderUserId().equals(userId)
+                        || payment.getReceiverUserId().equals(userId);
+
+        System.out.println("Is Owner = " + isOwner);
+
+        if (!isOwner) {
+            throw new AccessDeniedException(
+                    "You are not authorized to view this payment");
+        }
+
         return mapToResponse(payment);
     }
 
