@@ -7,6 +7,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -39,7 +40,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
                 .getRequest()
                 .getHeaders()
                 .getFirst(HttpHeaders.AUTHORIZATION);
-        if(authHeader == null ||
+        if (authHeader == null ||
                 !authHeader.startsWith("Bearer ")) {
 
             exchange.getResponse()
@@ -64,7 +65,29 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
                                 .setComplete();
                     }
 
-                    return chain.filter(exchange);
+                    ServerHttpRequest modifiedRequest =
+                            exchange.getRequest()
+                                    .mutate()
+                                    .header(
+                                            "X-User-Id",
+                                            response.getUserId().toString()
+                                    )
+                                    .header(
+                                            "X-User-Email",
+                                            response.getEmail()
+                                    )
+                                    .header(
+                                            "X-User-Role",
+                                            response.getRole()
+                                    )
+                                    .build();
+
+                    ServerWebExchange modifiedExchange =
+                            exchange.mutate()
+                                    .request(modifiedRequest)
+                                    .build();
+
+                    return chain.filter(modifiedExchange);
                 })
                 .onErrorResume(ex -> {
 
