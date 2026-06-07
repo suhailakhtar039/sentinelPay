@@ -29,10 +29,8 @@ public class PaymentFailedConsumer {
                         event.getPaymentId()
                 ).orElseThrow();
 
-        payment.setStatus(
-                PaymentStatus.FAILED
-        );
-
+        payment.setStatus(PaymentStatus.FAILED);
+        payment.setFailureReason(event.getReason());
         repository.save(payment);
 
         log.info(
