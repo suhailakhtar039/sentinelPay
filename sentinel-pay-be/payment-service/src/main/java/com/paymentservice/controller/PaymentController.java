@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +25,10 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<PaymentResponse>> initiatePayment(
+            @RequestHeader("X-User-Id") Long senderUserId,
             @Valid @RequestBody PaymentRequest request
-            ){
-        PaymentResponse response = paymentService.initiatePayment(request);
+    ) {
+        PaymentResponse response = paymentService.initiatePayment(senderUserId, request);
         return ResponseEntity.ok(
                 ApiResponse.<PaymentResponse>builder()
                         .success(true)
@@ -41,7 +43,7 @@ public class PaymentController {
     @GetMapping("/{paymentId}")
     public ResponseEntity<ApiResponse<PaymentResponse>> getPayment(
             @PathVariable Long paymentId
-    ){
+    ) {
         PaymentResponse response = paymentService.getPayment(paymentId);
         return ResponseEntity.ok(
                 ApiResponse.<PaymentResponse>builder()
