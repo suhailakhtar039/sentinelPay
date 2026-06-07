@@ -16,9 +16,6 @@ import java.math.BigDecimal;
 public class PaymentRequest {
 
     @NotNull
-    private Long senderUserId;
-
-    @NotNull
     private Long receiverUserId;
 
     @NotNull

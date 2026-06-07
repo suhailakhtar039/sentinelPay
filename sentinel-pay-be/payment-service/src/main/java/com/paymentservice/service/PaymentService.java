@@ -20,10 +20,10 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentEventProducer paymentEventProducer;
 
-    public PaymentResponse initiatePayment(PaymentRequest request) {
+    public PaymentResponse initiatePayment(Long senderUserId, PaymentRequest request) {
         // validation
 
-        if (request.getSenderUserId().equals(request.getReceiverUserId())) {
+        if (senderUserId.equals(request.getReceiverUserId())) {
             throw new BadRequestException(
                     "Sender and receiver cannot be same");
         }
@@ -34,7 +34,7 @@ public class PaymentService {
         }
 
         Payment payment = Payment.builder()
-                .senderUserId(request.getSenderUserId())
+                .senderUserId(senderUserId)
                 .receiverUserId(request.getReceiverUserId())
                 .amount(request.getAmount())
                 .status(PaymentStatus.PENDING)
