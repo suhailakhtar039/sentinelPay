@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,4 +56,23 @@ public class PaymentController {
                         .build()
         );
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<PaymentResponse>>> getMyPayments(
+            @RequestHeader("X-User-Id") Long userId
+    ) {
+
+        List<PaymentResponse> response =
+                paymentService.getMyPayments(userId);
+
+        return ResponseEntity.ok(
+                ApiResponse.<List<PaymentResponse>>builder()
+                        .success(true)
+                        .message("Payments retrieved successfully")
+                        .data(response)
+                        .timestamp(LocalDateTime.now())
+                        .build()
+        );
+    }
+
 }

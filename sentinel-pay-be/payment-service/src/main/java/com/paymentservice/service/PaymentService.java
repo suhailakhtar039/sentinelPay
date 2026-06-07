@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -64,10 +66,6 @@ public class PaymentService {
                         new ResourceNotFoundException(
                                 "Payment with id " + paymentId + " is not present"));
 
-        System.out.println("Logged User = " + userId);
-        System.out.println("Sender = " + payment.getSenderUserId());
-        System.out.println("Receiver = " + payment.getReceiverUserId());
-
         boolean isOwner =
                 payment.getSenderUserId().equals(userId)
                         || payment.getReceiverUserId().equals(userId);
@@ -80,6 +78,14 @@ public class PaymentService {
         }
 
         return mapToResponse(payment);
+    }
+
+    public List<PaymentResponse> getMyPayments(Long userId){
+        return paymentRepository
+                .findBySenderUserIdOrReceiverUserId(userId, userId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
     private PaymentResponse mapToResponse(Payment payment){
