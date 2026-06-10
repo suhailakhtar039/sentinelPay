@@ -1,3 +1,6 @@
 export const API_CONFIG = {
-  BASE_URL: 'http://localhost:8080',
+  auth: 'http://localhost:8080/api/auth',
+  wallet: 'http://localhost:8080/api/wallets',
+  payment: 'http://localhost:8080/api/payments',
+  ledger: 'http://localhost:8080/api/ledger',
 };
