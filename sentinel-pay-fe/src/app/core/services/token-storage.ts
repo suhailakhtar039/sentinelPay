@@ -28,4 +28,37 @@ export class TokenStorageService {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
   }
+
+  getUserId(): string | null {
+    const user = this.getUser();
+    return user?.userId ?? null;
+  }
+
+  getEmail(): string | null {
+    const user = this.getUser();
+    return user?.email ?? null;
+  }
+
+  getRole(): string | null {
+    const user = this.getUser();
+    return user?.role ?? null;
+  }
+
+  private getUser(): {
+    userId: string;
+    email: string;
+    role: string;
+  } | null {
+    const user = localStorage.getItem(this.USER_KEY);
+
+    if (!user) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(user);
+    } catch {
+      return null;
+    }
+  }
 }
