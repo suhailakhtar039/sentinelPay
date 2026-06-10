@@ -1,8 +1,23 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { TokenStorageService } from './token-storage';
+import { LoginRequest } from '../../shared/models/login-request';
+import { Observable, tap } from 'rxjs';
+import { LoginResponse } from '../../shared/models/login-response';
+import { API_CONFIG } from '../config/api.config';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Auth {
-  
+export class AuthService {
+  private readonly http = inject(HttpClient);
+  private readonly tokenStorage = inject(TokenStorageService);
+
+  login(request: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${API_CONFIG.auth}/login`, request).pipe(
+      tap((response) => {
+        this.tokenStorage.saveAuth(response);
+      }),
+    );
+  }
 }
