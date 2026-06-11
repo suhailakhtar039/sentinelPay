@@ -5,6 +5,8 @@ import { LoginRequest } from '../../shared/models/login-request';
 import { Observable, tap } from 'rxjs';
 import { LoginResponse } from '../../shared/models/login-response';
 import { API_CONFIG } from '../config/api.config';
+import { RegisterRequest } from '../../shared/models/register-request';
+import { RegisterResponse } from '../../shared/models/register-response';
 
 @Injectable({
   providedIn: 'root',
@@ -19,5 +21,17 @@ export class AuthService {
         this.tokenStorage.saveAuth(response);
       }),
     );
+  }
+
+  register(request: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${API_CONFIG.auth}/register`, request);
+  }
+
+  logout(): void {
+    this.tokenStorage.logout();
+  }
+
+  isLoggedIn(): boolean {
+    return this.tokenStorage.isLoggedIn();
   }
 }
