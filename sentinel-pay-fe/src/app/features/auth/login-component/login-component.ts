@@ -6,6 +6,7 @@ import { MatCardModule, MatCardSubtitle, MatCardTitle } from '@angular/material/
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-login-component',
