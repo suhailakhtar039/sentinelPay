@@ -6,7 +6,9 @@ import { MatCardModule, MatCardSubtitle, MatCardTitle } from '@angular/material/
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLinkActive, RouterModule } from '@angular/router';
+import { RouterLinkActive, RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth';
+import { LoginRequest } from '../../../shared/models/login-request';
 
 @Component({
   selector: 'app-login-component',
@@ -28,7 +30,12 @@ import { RouterLinkActive, RouterModule } from '@angular/router';
 export class LoginComponent implements OnInit {
   hidePassword = true;
   loginForm!: FormGroup;
-  constructor(private fb: FormBuilder) {}
+  errorField = '';
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -38,6 +45,24 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.loginForm);
+    if (this.loginForm.valid) {
+      const request: LoginRequest = {
+        email: this.loginForm.get('email')?.value,
+        password: this.loginForm.get('password')?.value,
+      };
+      this.authService.login(request).subscribe({
+        next: (response: any) => {
+          console.log('Login successful', response);
+          this.router.navigate(['/dashboard']).catch((err) => console.error(err));
+        },
+        error: (err: any) => {
+          console.error('Login failed', err);
+          this.loginForm.markAllAsDirty();
+          this.errorField = 'Email or Password is wrong';
+        },
+      });
+    } else {
+      this.loginForm.markAllAsDirty();
+    }
   }
 }

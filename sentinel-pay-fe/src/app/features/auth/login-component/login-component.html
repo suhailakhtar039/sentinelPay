@@ -35,7 +35,6 @@
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
         </mat-form-field>
-
         @if (
           loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched
         ) {
@@ -50,6 +49,7 @@
       </mat-card-actions>
 
       <mat-card-footer class="text-center mt-4">
+        <mat-error>{{ errorField }}</mat-error>
         <p class="register-link">
           Don't have an account?
           <a
