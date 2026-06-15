@@ -6,8 +6,9 @@ import { MatCardModule, MatCardSubtitle, MatCardTitle } from '@angular/material/
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
+import { RegisterRequest } from '../../shared/models/register-request';
 
 @Component({
   selector: 'app-register',
@@ -34,6 +35,7 @@ export class Register {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -44,5 +46,25 @@ export class Register {
     });
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if(this.registerForm.valid){
+      const request: RegisterRequest = {
+        name: this.registerForm.get('name')?.value,
+        email: this.registerForm.get('email')?.value,
+        password: this.registerForm.get('password')?.value
+      }
+      this.authService.register(request).subscribe({
+        next: (response: any) => {
+          console.log(response);
+          this.router.navigate(['/dashboard']);
+        },
+        error: (response: any) => {
+          console.error(response);
+          this.router.navigate(['/login']);
+        }
+      });
+    } else{
+      this.registerForm.markAllAsDirty();
+    }
+  }
 }
