@@ -13,6 +13,10 @@ export const routes: Route[] = [
     loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
   },
   {
+    path: 'register',
+    loadComponent: () => import('./features/register/register').then((m) => m.Register),
+  },
+  {
     path: '**',
     redirectTo: '',
   },
