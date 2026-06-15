@@ -35,7 +35,7 @@ export class Register {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -47,12 +47,12 @@ export class Register {
   }
 
   onSubmit() {
-    if(this.registerForm.valid){
+    if (this.registerForm.valid) {
       const request: RegisterRequest = {
         name: this.registerForm.get('name')?.value,
         email: this.registerForm.get('email')?.value,
-        password: this.registerForm.get('password')?.value
-      }
+        password: this.registerForm.get('password')?.value,
+      };
       this.authService.register(request).subscribe({
         next: (response: any) => {
           console.log(response);
@@ -61,9 +61,9 @@ export class Register {
         error: (response: any) => {
           console.error(response);
           this.router.navigate(['/login']);
-        }
+        },
       });
-    } else{
+    } else {
       this.registerForm.markAllAsDirty();
     }
   }
