@@ -26,7 +26,7 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Enter your name</mat-label>
 
-          <input matInput type="email" formControlName="name" placeholder="Enter Your Name" />
+          <input matInput type="text" formControlName="name" placeholder="Enter Your Name" />
 
           @if (
             registerForm.get('name')?.hasError('required') && registerForm.get('name')?.touched
@@ -62,7 +62,9 @@
           Register
         </button>
       </mat-card-actions>
-
+      @if (errorMessage) {
+        <mat-error>{{ errorMessage }}</mat-error>
+      }
       <mat-card-footer class="text-center mt-4">
         <!-- <mat-error>{{ errorField }}</mat-error> -->
         <a routerLink="/login" class="text-blue-600 hover:text-blue-800 font-medium cursor-pointer"

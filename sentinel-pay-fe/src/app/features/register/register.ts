@@ -32,6 +32,8 @@ export class Register {
 
   hidePassword = true;
 
+  errorMessage = '';
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -55,12 +57,15 @@ export class Register {
       };
       this.authService.register(request).subscribe({
         next: (response: any) => {
-          console.log(response);
-          this.router.navigate(['/dashboard']);
-        },
-        error: (response: any) => {
-          console.error(response);
+          console.log('Registration successful', response);
+
+          // Optional success message
           this.router.navigate(['/login']);
+        },
+        error: (err: any) => {
+          console.error('Registration failed', err);
+
+          this.errorMessage = err?.error?.message ?? 'Registration failed';
         },
       });
     } else {
