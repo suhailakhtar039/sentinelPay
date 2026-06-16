@@ -1,1 +1,11 @@
-<p>navbar works!</p>
+<mat-toolbar class="flex justify-between px-4 bg-gray-200!">
+  <!-- Logo / Brand -->
+  <div class="flex items-center gap-2">
+    <span class="text-xl font-semibold">Sentinel Pay</span>
+  </div>
+
+  <div class="items-center gap-4">
+    <span class="text-xl bold px-2">{{ email }}</span>
+    <a mat-raised-button color="primary" routerLink="/logout"> Logout </a>
+  </div>
+</mat-toolbar>
