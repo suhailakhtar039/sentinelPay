@@ -3,21 +3,14 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { TokenStorageService } from '../../core/services/token-storage';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatMenuModule,
-    RouterLink,
-    MatButtonModule,
-  ],
+  imports: [CommonModule, MatToolbarModule, MatIconModule, MatMenuModule, MatButtonModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
