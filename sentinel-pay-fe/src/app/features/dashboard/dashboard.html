@@ -1,27 +1,17 @@
-<p>dashboard works!</p>
-<h1>Here I ams</h1>
-My email id is: {{ email }}
-<br />
-My Role is : {{ role }}
+<h2>Welcome {{ email }}</h2>
 
-<h2>Wallet</h2>
+<p>
+  Available Balance:
+  {{ wallet?.balance }}
+  {{ wallet?.currency }}
+</p>
 
-<p>Balance: {{ wallet?.balance }}</p>
+<p>
+  Total Payments:
+  {{ payments.length }}
+</p>
 
-<p>Currency: {{ wallet?.currency }}</p>
-
-<hr />
-
-<h2>Payments</h2>
-
-<p>Total Payments: {{ payments.length }}</p>
-
-<hr />
-
-<h2>Transactions</h2>
-
-<p>Total Transactions: {{ transactions.length }}</p>
-
-<div class="flex justify-center mt-4">
-  <button color="primary" mat-raised-button type="submit" (click)="logout()">Logout</button>
-</div>
+<p>
+  Total Transactions:
+  {{ transactions.length }}
+</p>
