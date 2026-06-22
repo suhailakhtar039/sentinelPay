@@ -3,6 +3,8 @@ import { Route } from '@angular/router';
 import { LoginComponent } from './features/auth/login-component/login-component';
 import { authGuard } from './core/guards/auth-guard';
 import { MainLayout } from './features/main-layout/main-layout';
+import { PaymentCreate } from './features/payment/pages/payment-create/payment-create';
+import { PaymentHistory } from './features/payment/pages/payment-history/payment-history';
 
 export const routes: Route[] = [
   {
@@ -10,7 +12,19 @@ export const routes: Route[] = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-
+  {
+    path: 'payments',
+    children: [
+      {
+        path: '',
+        component: PaymentHistory,
+      },
+      {
+        path: 'new',
+        component: PaymentCreate,
+      },
+    ],
+  },
   {
     path: 'login',
     component: LoginComponent,
