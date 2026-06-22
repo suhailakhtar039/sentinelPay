@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { WalletResponse } from '../../shared/models/wallet-response';
-import { PaymentResponse } from '../../shared/models/payment-response';
+import { PaymentResponse } from '../payment/model/payment-response';
 import { LedgerResponse } from '../../shared/models/ledger-response';
 import { forkJoin } from 'rxjs';
 import { WalletService } from '../../core/services/wallet-service';
 import { LedgerService } from '../../core/services/ledger-service';
-import { PaymentService } from '../../core/services/payment-service';
+import { PaymentService } from '../payment/services/payment-service';
 
 @Component({
   selector: 'app-dashboard',
