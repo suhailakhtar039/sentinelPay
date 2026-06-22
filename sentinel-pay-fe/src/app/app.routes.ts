@@ -32,11 +32,6 @@ export const routes: Route[] = [
       },
 
       {
-        path: 'payments',
-        loadComponent: () => import('./features/payment/payment').then((m) => m.Payment),
-      },
-
-      {
         path: 'ledger',
         loadComponent: () => import('./features/ledger/ledger').then((m) => m.Ledger),
       },
