@@ -5,25 +5,13 @@ import { authGuard } from './core/guards/auth-guard';
 import { MainLayout } from './features/main-layout/main-layout';
 import { PaymentCreate } from './features/payment/pages/payment-create/payment-create';
 import { PaymentHistory } from './features/payment/pages/payment-history/payment-history';
+import { Payment } from './features/payment/payment';
 
 export const routes: Route[] = [
   {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
-  },
-  {
-    path: 'payments',
-    children: [
-      {
-        path: '',
-        component: PaymentHistory,
-      },
-      {
-        path: 'new',
-        component: PaymentCreate,
-      },
-    ],
   },
   {
     path: 'login',
@@ -44,10 +32,27 @@ export const routes: Route[] = [
         path: 'dashboard',
         loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
       },
-
       {
         path: 'ledger',
         loadComponent: () => import('./features/ledger/ledger').then((m) => m.Ledger),
+      },
+      {
+        path: 'payments',
+        component: Payment,
+        children: [
+          {
+            path: '',
+            component: Payment,
+          },
+          {
+            path: 'new',
+            component: PaymentCreate,
+          },
+          {
+            path: 'history',
+            component: PaymentHistory,
+          },
+        ],
       },
     ],
   },
