@@ -1,24 +1,39 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PaymentService } from '../../services/payment-service';
 
 @Component({
   selector: 'app-payment-create',
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatSnackBarModule,
   ],
   templateUrl: './payment-create.html',
   styleUrl: './payment-create.css',
 })
-export class PaymentCreate {}
+export class PaymentCreate {
+  private readonly fb = inject(FormBuilder);
+  private readonly paymentService = inject(PaymentService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  loading = false;
+
+  paymentForm = this.fb.group({
+    receiverUserId: ['', [Validators.required, Validators.min(1)]],
+    amount: ['', [Validators.required, Validators.min(1)]],
+  });
+}
