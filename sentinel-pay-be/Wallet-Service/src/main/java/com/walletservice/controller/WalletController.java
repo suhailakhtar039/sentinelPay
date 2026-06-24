@@ -3,6 +3,7 @@ package com.walletservice.controller;
 import com.sentinelpay.common.response.ApiResponse;
 import com.walletservice.dto.CreateWalletRequest;
 import com.walletservice.dto.WalletResponse;
+import com.walletservice.dto.WalletTopUpRequest;
 import com.walletservice.service.WalletService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class WalletController {
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<WalletResponse>> getMyWallet(
-            @RequestHeader("X-User-Id") Long userId){
+            @RequestHeader("X-User-Id") Long userId) {
         WalletResponse response = service.getWalletByUserId(userId);
 
         return ResponseEntity.ok(
@@ -74,6 +75,22 @@ public class WalletController {
             @RequestHeader("X-User-Role") String role
     ) {
         return userId + " | " + email + " | " + role;
+    }
+
+    @PostMapping("/topup")
+    public ResponseEntity<ApiResponse<WalletResponse>> topUpWallet(
+            @RequestHeader("X-User-Id") Long userId,
+            @Valid @RequestBody WalletTopUpRequest request
+    ) {
+        WalletResponse response = service.createTopUp(userId, request);
+        return ResponseEntity.ok(
+                ApiResponse.<WalletResponse>builder()
+                        .success(true)
+                        .message("Wallet topped up successfully")
+                        .data(response)
+                        .timestamp(LocalDateTime.now())
+                        .build()
+        );
     }
 
 }
