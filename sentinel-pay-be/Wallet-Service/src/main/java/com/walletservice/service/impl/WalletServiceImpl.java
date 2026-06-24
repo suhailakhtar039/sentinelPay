@@ -6,6 +6,7 @@ import com.sentinelpay.common.exception.BadRequestException;
 import com.sentinelpay.common.exception.ResourceNotFoundException;
 import com.sentinelpay.common.exception.WalletNotFoundException;
 import com.walletservice.dto.WalletResponse;
+import com.walletservice.dto.WalletTopUpRequest;
 import com.walletservice.entity.Wallet;
 import com.walletservice.enums.WalletStatus;
 import com.walletservice.kafka.WalletEventProducer;
@@ -103,6 +104,25 @@ public class WalletServiceImpl implements WalletService {
                 .build();
 
         walletEventProducer.publishPaymentCompleted(paymentCompletedEvent);
+    }
+
+    @Override
+    @Transactional
+    public WalletResponse createTopUp(Long userId, WalletTopUpRequest request) {
+        Wallet wallet = repository.findByUserId(userId)
+                .orElseThrow(() -> new WalletNotFoundException("Wallet with userId " + userId + " not present."));
+
+        wallet.setBalance(wallet.getBalance().add(request.getAmount()));
+        Wallet updated = repository.save(wallet);
+
+        return WalletResponse.builder()
+                .walletId(updated.getWalletId())
+                .userId(updated.getUserId())
+                .balance(updated.getBalance())
+                .currency(updated.getCurrency())
+                .status(updated.getStatus().name())
+                .build();
+
     }
 
 }
