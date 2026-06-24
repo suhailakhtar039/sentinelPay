@@ -64,6 +64,8 @@ export class PaymentCreate {
             duration: 3000,
           });
           this.paymentForm.reset();
+          this.paymentForm.markAsPristine();
+          this.paymentForm.markAsUntouched();
         },
         error: (err: any) => {
           const message = err?.error?.message || 'Unable To Process Payment';
