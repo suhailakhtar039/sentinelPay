@@ -14,4 +14,8 @@ export class WalletService {
   getMyWallet(): Observable<ApiResponse<WalletResponse>> {
     return this.http.get<ApiResponse<WalletResponse>>(`${API_CONFIG.wallet}/me`);
   }
+
+  topupwallet(amount: number): Observable<ApiResponse<WalletResponse>> | null {
+    return this.http.post<ApiResponse<WalletResponse>>(`${API_CONFIG.wallet}/topup`, { amount });
+  }
 }
