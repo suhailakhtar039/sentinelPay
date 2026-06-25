@@ -6,6 +6,7 @@ import { MainLayout } from './features/main-layout/main-layout';
 import { PaymentCreate } from './features/payment/pages/payment-create/payment-create';
 import { PaymentHistory } from './features/payment/pages/payment-history/payment-history';
 import { Payment } from './features/payment/payment';
+import { WalletPopup } from './features/wallet/pages/wallet-popup/wallet-popup';
 
 export const routes: Route[] = [
   {
@@ -53,6 +54,10 @@ export const routes: Route[] = [
             component: PaymentHistory,
           },
         ],
+      },
+      {
+        path: 'wallet/topup',
+        component: WalletPopup,
       },
     ],
   },
