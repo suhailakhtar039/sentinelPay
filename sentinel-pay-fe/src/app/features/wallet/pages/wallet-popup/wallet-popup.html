@@ -1,7 +1,17 @@
-<mat-card>
-  <mat-card-header>Top Up Your Wallet</mat-card-header>
-  <mat-card-content>
-    Enter your amount:
-    <input matInput type="number" [(ngModel)]="amount" (click)="submit()" />
-  </mat-card-content>
-</mat-card>
+<form [formGroup]="topUpForm" (ngSubmit)="submit()">
+  <mat-card>
+    <mat-card-header> Top Up Your Wallet </mat-card-header>
+
+    <mat-card-content class="flex flex-col gap-4 mt-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Amount</mat-label>
+
+        <input matInput type="number" formControlName="amount" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="topUpForm.invalid">
+        Top Up
+      </button>
+    </mat-card-content>
+  </mat-card>
+</form>
