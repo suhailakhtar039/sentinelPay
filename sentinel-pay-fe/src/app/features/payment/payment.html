@@ -1,14 +1,1 @@
-@if (showMenu) {
-  <mat-card>
-    <mat-card-header>Choose One</mat-card-header>
-    <mat-card-content class="flex! row-auto m-auto gap-4">
-      <a mat-raised-button routerLink="/payments/new">Create Payment</a>
-      <a mat-raised-button routerLink="/payments/history">See Payment history</a>
-      <a mat-raised-button routerLink="/wallet/topup">Top Up Wallet</a>
-    </mat-card-content>
-  </mat-card>
-} @else {
-  <div class="mt-6">
-    <router-outlet></router-outlet>
-  </div>
-}
+<router-outlet></router-outlet>
