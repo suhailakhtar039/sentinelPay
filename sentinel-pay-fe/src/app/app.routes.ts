@@ -42,6 +42,13 @@ export const routes: Route[] = [
         component: Payment,
         children: [
           {
+            path: '',
+            loadComponent: () =>
+              import('./features/payment/pages/payment-menu/payment-menu').then(
+                (m) => m.PaymentMenu,
+              ),
+          },
+          {
             path: 'new',
             component: PaymentCreate,
           },
