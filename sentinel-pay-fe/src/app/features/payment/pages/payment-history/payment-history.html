@@ -9,10 +9,10 @@
         <mat-spinner diameter="45"></mat-spinner>
       </div>
     } @else if (dataSource.data.length > 0) {
-      <table mat-table [dataSource]="dataSource" class="w-full">
+      <table mat-table [dataSource]="dataSource" class="w-full rounded-lg overflow-hidden">
         <!-- Payment ID -->
         <ng-container matColumnDef="paymentId">
-          <th mat-header-cell *matHeaderCellDef>Payment ID</th>
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">Payment ID</th>
 
           <td mat-cell *matCellDef="let payment">
             {{ payment.paymentId }}
@@ -40,8 +40,18 @@
           <th mat-header-cell *matHeaderCellDef>Status</th>
 
           <td mat-cell *matCellDef="let payment">
-            <mat-chip highlighted>
-              {{ payment.status }}
+            <mat-chip highlighted [color]="getChipColor(payment.status)">
+              @switch (payment.status) {
+                @case ('COMPLETED') {
+                  ✔ Completed
+                }
+                @case ('FAILED') {
+                  ✖ Failed
+                }
+                @default {
+                  {{ payment.status }}
+                }
+              }
             </mat-chip>
           </td>
         </ng-container>
