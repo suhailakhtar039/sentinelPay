@@ -53,10 +53,8 @@ export class PaymentHistory implements OnInit {
         next: (response) => {
           console.log('Success', response);
           this.dataSource.data = response.data ?? [];
-          this.loading = false;
         },
         error: (error) => {
-          this.loading = false;
           console.error('Error', error);
         },
       });
