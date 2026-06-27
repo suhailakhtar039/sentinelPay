@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,6 +28,9 @@ import { finalize } from 'rxjs';
   styleUrl: './payment-create.css',
 })
 export class PaymentCreate {
+  @ViewChild(FormGroupDirective)
+  private formDirective!: FormGroupDirective;
+
   private readonly fb = inject(FormBuilder);
   private readonly paymentService = inject(PaymentService);
   private readonly snackBar = inject(MatSnackBar);
@@ -63,9 +66,7 @@ export class PaymentCreate {
           this.snackBar.open(response.message || 'Payment Initiated Successfully', 'Close', {
             duration: 3000,
           });
-          this.paymentForm.reset();
-          this.paymentForm.markAsPristine();
-          this.paymentForm.markAsUntouched();
+          this.formDirective.resetForm();
         },
         error: (err: any) => {
           const message = err?.error?.message || 'Unable To Process Payment';
