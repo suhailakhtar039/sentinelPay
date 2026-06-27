@@ -42,10 +42,6 @@ export const routes: Route[] = [
         component: Payment,
         children: [
           {
-            path: '',
-            component: Payment,
-          },
-          {
             path: 'new',
             component: PaymentCreate,
           },
