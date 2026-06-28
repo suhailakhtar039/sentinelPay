@@ -9,7 +9,9 @@
   <!-- Statistics -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
     <!-- Wallet -->
-    <mat-card>
+    <mat-card
+      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+    >
       <mat-card-content class="p-6">
         <p class="text-gray-500">Wallet Balance</p>
 
@@ -17,21 +19,27 @@
       </mat-card-content>
     </mat-card>
     <!-- Total Payments -->
-    <mat-card>
+    <mat-card
+      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+    >
       <mat-card-content class="p-6">
         <p class="text-gray-500">Total Payments</p>
         <h2 class="text-3xl font-bold mt-2">{{ totalPayments }}</h2>
       </mat-card-content>
     </mat-card>
     <!-- Successful -->
-    <mat-card>
+    <mat-card
+      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+    >
       <mat-card-content class="p-6">
         <p class="text-gray-500">Successful</p>
         <h2 class="text-3xl font-bold text-green-600 mt-2">{{ successfulTransaction }}</h2>
       </mat-card-content>
     </mat-card>
     <!-- Failed -->
-    <mat-card>
+    <mat-card
+      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+    >
       <mat-card-content class="p-6">
         <p class="text-gray-500">Failed</p>
         <h2 class="text-3xl font-bold text-red-600 mt-2">
