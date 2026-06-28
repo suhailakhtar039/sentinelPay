@@ -1,4 +1,4 @@
-<h2>Welcome {{ email }}</h2>
+<!-- <h2>Welcome {{ email }}</h2>
 
 <p>
   Available Balance:
@@ -15,4 +15,31 @@
   Total Transactions:
   {{ transactions.length }}
 </p>
-<button mat-raised-botton routerLink="/wallet/topup">Top Up Wallet</button>
+<button mat-raised-botton routerLink="/wallet/topup">Top Up Wallet</button> -->
+<mat-card>
+  <mat-card-header> Wallet Balance </mat-card-header>
+  <mat-card-content>
+    {{ walletBalance }}
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header> Total Balance </mat-card-header>
+  <mat-card-content>
+    {{ totalPayments }}
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header> Successful </mat-card-header>
+  <mat-card-content>
+    {{ successfulTransaction }}
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header> Failed </mat-card-header>
+  <mat-card-content>
+    {{ failedTransaction }}
+  </mat-card-content>
+</mat-card>
