@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { TokenStorageService } from '../../core/services/token-storage';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,10 +10,12 @@ import { forkJoin } from 'rxjs';
 import { WalletService } from '../../core/services/wallet-service';
 import { LedgerService } from '../../core/services/ledger-service';
 import { PaymentService } from '../payment/services/payment-service';
+import { PaymentStatus } from '../payment/model/payment-status';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, MatButtonModule, RouterLink],
+  imports: [CommonModule, MatButtonModule, RouterLink, MatCardModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -25,12 +27,25 @@ export class Dashboard {
   payments: PaymentResponse[] = [];
   transactions: LedgerResponse[] = [];
 
+  // wallet balance variable
+  walletBalance?: number;
+
+  // total payments
+  totalPayments?: number;
+
+  // total successfull transaction
+  successfulTransaction?: number;
+
+  // total failed transaction
+  failedTransaction?: number;
+
   constructor(
     private tokenService: TokenStorageService,
     private router: Router,
     private walletService: WalletService,
     private ledgerService: LedgerService,
     private paymentService: PaymentService,
+    private cdf: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -46,6 +61,25 @@ export class Dashboard {
         ((this.wallet = result.wallet.data),
           (this.payments = result.payments.data),
           (this.transactions = result.ledger.data));
+        // Total wallet balance
+        this.walletBalance = Number(this.wallet?.balance);
+
+        // Total Payments
+        this.totalPayments = Number(this.payments.length);
+
+        // succesful payments
+        this.successfulTransaction = this.payments.filter(
+          (payment) => payment.status === PaymentStatus.COMPLETED,
+        ).length;
+
+        // failed payments
+        this.failedTransaction = this.payments.filter(
+          (payment) =>
+            payment.status === PaymentStatus.FAILED ||
+            payment.status === PaymentStatus.FRAUD_REJECTED,
+        ).length;
+
+        this.cdf.detectChanges();
       },
       error: (err: any) => {
         console.log(err);
