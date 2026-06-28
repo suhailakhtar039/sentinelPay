@@ -1,45 +1,55 @@
-<!-- <h2>Welcome {{ email }}</h2>
+<div class="p-6">
+  <!-- Only welcome content -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold">Welcome, {{ email }}</h1>
 
-<p>
-  Available Balance:
-  {{ wallet?.balance }}
-  {{ wallet?.currency }}
-</p>
+    <p class="text-gray-500 mt-1">Manage your wallets and payments.</p>
+  </div>
 
-<p>
-  Total Payments:
-  {{ payments.length }}
-</p>
+  <!-- Statistics -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+    <!-- Wallet -->
+    <mat-card>
+      <mat-card-content class="p-6">
+        <p class="text-gray-500">Wallet Balance</p>
 
-<p>
-  Total Transactions:
-  {{ transactions.length }}
-</p>
-<button mat-raised-botton routerLink="/wallet/topup">Top Up Wallet</button> -->
-<mat-card>
-  <mat-card-header> Wallet Balance </mat-card-header>
-  <mat-card-content>
-    {{ walletBalance }}
-  </mat-card-content>
-</mat-card>
-
-<mat-card>
-  <mat-card-header> Total Balance </mat-card-header>
-  <mat-card-content>
-    {{ totalPayments }}
-  </mat-card-content>
-</mat-card>
-
-<mat-card>
-  <mat-card-header> Successful </mat-card-header>
-  <mat-card-content>
-    {{ successfulTransaction }}
-  </mat-card-content>
-</mat-card>
-
-<mat-card>
-  <mat-card-header> Failed </mat-card-header>
-  <mat-card-content>
-    {{ failedTransaction }}
-  </mat-card-content>
-</mat-card>
+        <h2 class="text-3xl font-bold mt-2">₹ {{ walletBalance }}</h2>
+      </mat-card-content>
+    </mat-card>
+    <!-- Total Payments -->
+    <mat-card>
+      <mat-card-content class="p-6">
+        <p class="text-gray-500">Total Payments</p>
+        <h2 class="text-3xl font-bold mt-2">{{ totalPayments }}</h2>
+      </mat-card-content>
+    </mat-card>
+    <!-- Successful -->
+    <mat-card>
+      <mat-card-content class="p-6">
+        <p class="text-gray-500">Successful</p>
+        <h2 class="text-3xl font-bold text-green-600 mt-2">{{ successfulTransaction }}</h2>
+      </mat-card-content>
+    </mat-card>
+    <!-- Failed -->
+    <mat-card>
+      <mat-card-content class="p-6">
+        <p class="text-gray-500">Failed</p>
+        <h2 class="text-3xl font-bold text-red-600 mt-2">
+          {{ failedTransaction }}
+        </h2>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <!-- Quick Actions -->
+  <div class="mt-10">
+    <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+    <div class="flex flex-wrap gap-4">
+      <!-- create payment -->
+      <button mat-raised-button color="primary" routerLink="/payments/new">Create Payment</button>
+      <!-- top up -->
+      <button mat-raised-button color="primary" routerLink="/wallet/topup">Top Up Wallet</button>
+      <!-- payment history -->
+      <button mat-raised-button routerLink="/payments/history">Payment History</button>
+    </div>
+  </div>
+</div>
