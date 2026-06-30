@@ -1,63 +1,77 @@
-<div class="p-6">
-  <!-- Only welcome content -->
-  <div class="mb-8">
-    <h1 class="text-3xl font-bold">Welcome, {{ email }}</h1>
-
-    <p class="text-gray-500 mt-1">Manage your wallets and payments.</p>
+@if (loading) {
+  <div class="flex justify-center items-center py-10">
+    <mat-spinner [diameter]="50"></mat-spinner>
+    <p class="text-gray-500 text-lg">Loading dashboard...</p>
   </div>
+} @else {
+  @if (errorMessage.length > 0) {
+    <div class="bg-red-50 text-red-600 rounded-lg p-4 mb-6">{{ errorMessage }}</div>
+  }
+  <div class="p-6">
+    <!-- Only welcome content -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold">Welcome, {{ email }}</h1>
 
-  <!-- Statistics -->
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-    <!-- Wallet -->
-    <mat-card
-      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-    >
-      <mat-card-content class="p-6">
-        <p class="text-gray-500">Wallet Balance</p>
+      <p class="text-gray-500 mt-1">Manage your wallets and payments.</p>
+    </div>
 
-        <h2 class="text-3xl font-bold mt-2">₹ {{ walletBalance }}</h2>
-      </mat-card-content>
-    </mat-card>
-    <!-- Total Payments -->
-    <mat-card
-      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-    >
-      <mat-card-content class="p-6">
-        <p class="text-gray-500">Total Payments</p>
-        <h2 class="text-3xl font-bold mt-2">{{ totalPayments }}</h2>
-      </mat-card-content>
-    </mat-card>
-    <!-- Successful -->
-    <mat-card
-      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-    >
-      <mat-card-content class="p-6">
-        <p class="text-gray-500">Successful</p>
-        <h2 class="text-3xl font-bold text-green-600 mt-2">{{ successfulTransaction }}</h2>
-      </mat-card-content>
-    </mat-card>
-    <!-- Failed -->
-    <mat-card
-      class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-    >
-      <mat-card-content class="p-6">
-        <p class="text-gray-500">Failed</p>
-        <h2 class="text-3xl font-bold text-red-600 mt-2">
-          {{ failedTransaction }}
-        </h2>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <!-- Quick Actions -->
-  <div class="mt-10">
-    <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-    <div class="flex flex-wrap gap-4">
-      <!-- create payment -->
-      <button mat-raised-button color="primary" routerLink="/payments/new">Create Payment</button>
-      <!-- top up -->
-      <button mat-raised-button color="primary" routerLink="/wallet/topup">Top Up Wallet</button>
-      <!-- payment history -->
-      <button mat-raised-button routerLink="/payments/history">Payment History</button>
+    <!-- Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <!-- Wallet -->
+      <mat-card
+        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+      >
+        <mat-card-content class="p-6">
+          <p class="text-gray-500">Wallet Balance</p>
+
+          <h2 class="text-3xl font-bold mt-2">
+            {{ summary?.walletBalance | currency: 'INR' : 'symbol' : '1.0-0' }}
+          </h2>
+        </mat-card-content>
+      </mat-card>
+      <!-- Total Payments -->
+      <mat-card
+        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+      >
+        <mat-card-content class="p-6">
+          <p class="text-gray-500">Total Payments</p>
+          <h2 class="text-3xl font-bold mt-2">{{ summary?.totalPayments }}</h2>
+        </mat-card-content>
+      </mat-card>
+      <!-- Successful -->
+      <mat-card
+        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+      >
+        <mat-card-content class="p-6">
+          <p class="text-gray-500">Successful</p>
+          <h2 class="text-3xl font-bold text-green-600 mt-2">{{ summary?.successfulPayments }}</h2>
+        </mat-card-content>
+      </mat-card>
+      <!-- Failed -->
+      <mat-card
+        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+      >
+        <mat-card-content class="p-6">
+          <p class="text-gray-500">Failed</p>
+          <h2 class="text-3xl font-bold text-red-600 mt-2">
+            {{ summary?.failedPayments }}
+          </h2>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <!-- Quick Actions -->
+    <div class="mt-10">
+      <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+      <div class="flex flex-wrap gap-4">
+        <!-- create payment -->
+        <button mat-raised-button color="primary" routerLink="/payments/new">Create Payment</button>
+        <!-- top up -->
+        <button mat-raised-button color="primary" routerLink="/wallet/topup">Top Up Wallet</button>
+        <!-- payment history -->
+        <button mat-raised-button color="primary" routerLink="/payments/history">
+          Payment History
+        </button>
+      </div>
     </div>
   </div>
-</div>
+}
