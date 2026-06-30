@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { WalletService } from '../../../core/services/wallet-service';
-import { LedgerService } from '../../../core/services/ledger-service';
+import { LedgerService } from '../../ledger/service/ledger-service';
 import { PaymentService } from '../../payment/services/payment-service';
 import { forkJoin, map, Observable } from 'rxjs';
 import { WalletResponse } from '../../../shared/models/wallet-response';
-import { LedgerResponse } from '../../../shared/models/ledger-response';
+import { LedgerResponse } from '../../ledger/model/ledger-response';
 import { PaymentResponse } from '../../payment/model/payment-response';
 import { PaymentStatus } from '../../payment/model/payment-status';
 import { ApiResponse } from '../../../shared/models/api-response';
