@@ -1,4 +1,4 @@
-import { LedgerResponse } from '../../../shared/models/ledger-response';
+import { LedgerResponse } from '../../ledger/model/ledger-response';
 import { WalletResponse } from '../../../shared/models/wallet-response';
 import { PaymentResponse } from '../../payment/model/payment-response';
 
