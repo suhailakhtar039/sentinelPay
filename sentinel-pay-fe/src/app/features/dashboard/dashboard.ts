@@ -12,10 +12,13 @@ import { LedgerService } from '../../core/services/ledger-service';
 import { PaymentService } from '../payment/services/payment-service';
 import { PaymentStatus } from '../payment/model/payment-status';
 import { MatCardModule } from '@angular/material/card';
+import { DashboardService } from './service/DashboardService';
+import { DashboardSummary } from './model/dashboard-summary';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, MatButtonModule, RouterLink, MatCardModule],
+  imports: [CommonModule, MatButtonModule, RouterLink, MatCardModule, MatProgressSpinnerModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -23,28 +26,14 @@ export class Dashboard {
   email!: string | null;
   role!: string | null;
 
-  wallet?: WalletResponse;
-  payments: PaymentResponse[] = [];
-  transactions: LedgerResponse[] = [];
-
-  // wallet balance variable
-  walletBalance?: number;
-
-  // total payments
-  totalPayments?: number;
-
-  // total successfull transaction
-  successfulTransaction?: number;
-
-  // total failed transaction
-  failedTransaction?: number;
+  loading = true;
+  errorMessage = '';
+  summary?: DashboardSummary;
 
   constructor(
     private tokenService: TokenStorageService,
     private router: Router,
-    private walletService: WalletService,
-    private ledgerService: LedgerService,
-    private paymentService: PaymentService,
+    private dashboardService: DashboardService,
     private cdf: ChangeDetectorRef,
   ) {}
 
@@ -52,37 +41,22 @@ export class Dashboard {
     this.email = this.tokenService.getEmail();
     this.role = this.tokenService.getRole();
 
-    forkJoin({
-      wallet: this.walletService.getMyWallet(),
-      payments: this.paymentService.getMyPayments(),
-      ledger: this.ledgerService.getMyTransactions(),
-    }).subscribe({
-      next: (result: any) => {
-        ((this.wallet = result.wallet.data),
-          (this.payments = result.payments.data),
-          (this.transactions = result.ledger.data));
-        // Total wallet balance
-        this.walletBalance = Number(this.wallet?.balance);
+    this.loadDashboard();
+  }
 
-        // Total Payments
-        this.totalPayments = Number(this.payments.length);
+  loadDashboard(): void {
+    this.loading = true;
 
-        // succesful payments
-        this.successfulTransaction = this.payments.filter(
-          (payment) => payment.status === PaymentStatus.COMPLETED,
-        ).length;
-
-        // failed payments
-        this.failedTransaction = this.payments.filter(
-          (payment) =>
-            payment.status === PaymentStatus.FAILED ||
-            payment.status === PaymentStatus.FRAUD_REJECTED,
-        ).length;
-
+    this.dashboardService.getDashboardSummary().subscribe({
+      next: (summary) => {
+        this.summary = summary;
+        this.loading = false;
         this.cdf.detectChanges();
       },
-      error: (err: any) => {
-        console.log(err);
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'Unable to load dashboard. Please try again';
+        this.cdf.detectChanges();
       },
     });
   }
