@@ -37,10 +37,15 @@ export class DashboardService {
         const payments = result.payments.data;
         const transactions = result.ledger.data;
 
+        const recentPayments = [...payments]
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .slice(0, 5);
+
         return {
           wallet,
           payments,
           transactions,
+          recentPayments,
 
           walletBalance: Number(wallet.balance),
 
