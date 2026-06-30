@@ -73,5 +73,91 @@
         </button>
       </div>
     </div>
+    <!-- Recent payments -->
+    <div class="mt-12">
+      <h2 class="text-xl font-semibold mb-4">Recent Payments</h2>
+      @if (summary?.recentPayments?.length) {
+        <div class="overflow-x-auto rounded-xl shadow bg-white">
+          <table mat-table [dataSource]="summary!.recentPayments" class="w-full">
+            <!-- Payment ID -->
+            <ng-container matColumnDef="paymentId">
+              <th mat-header-cell *matHeaderCellDef>Payment ID</th>
+
+              <td mat-cell *matCellDef="let payment">#{{ payment.paymentId }}</td>
+            </ng-container>
+
+            <!-- Receiver -->
+            <ng-container matColumnDef="receiver">
+              <th mat-header-cell *matHeaderCellDef>Receiver ID</th>
+
+              <td mat-cell *matCellDef="let payment">
+                {{ payment.receiverUserId }}
+              </td>
+            </ng-container>
+
+            <!-- Amount -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+
+              <td mat-cell *matCellDef="let payment">
+                {{ payment.amount | currency: 'INR' : 'symbol' : '1.0-0' }}
+              </td>
+            </ng-container>
+
+            <!-- status -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let payment">
+                @switch (payment.status) {
+                  @case ('COMPLETED') {
+                    <mat-chip class="!bg-green-100 !text-green-700">Completed</mat-chip>
+                  }
+                  @case ('FAILED') {
+                    <mat-chip class="!bg-red-100 !text-red-700"> Failed </mat-chip>
+                  }
+
+                  @case ('FRAUD_REJECTED') {
+                    <mat-chip class="!bg-orange-100 !text-orange-700"> Fraud Rejected </mat-chip>
+                  }
+
+                  @default {
+                    <mat-chip class="!bg-yellow-100 !text-yellow-700"> Pending </mat-chip>
+                  }
+                }
+              </td>
+            </ng-container>
+
+            <!-- Date -->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+
+              <td mat-cell *matCellDef="let payment">
+                {{ payment.createdAt | date: 'dd MMM yyyy, hh:mm a' }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              class="hover:bg-gray-50 transition-colors"
+            ></tr>
+          </table>
+        </div>
+      } @else {
+        <div class="bg-white rounded-xl shadow p-10 text-center">
+          <div class="text-5xl mb-4">💳</div>
+
+          <h3 class="text-xl font-semibold">No Recent Payments</h3>
+
+          <p class="text-gray-500 mt-2 mb-6">Your latest transactions will appear here.</p>
+
+          <button mat-raised-button color="primary" routerLink="/payments/new">
+            Create Payment
+          </button>
+        </div>
+      }
+    </div>
   </div>
 }
