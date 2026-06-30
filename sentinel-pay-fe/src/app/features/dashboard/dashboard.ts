@@ -3,22 +3,24 @@ import { TokenStorageService } from '../../core/services/token-storage';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
-import { WalletResponse } from '../../shared/models/wallet-response';
-import { PaymentResponse } from '../payment/model/payment-response';
-import { LedgerResponse } from '../../shared/models/ledger-response';
-import { forkJoin } from 'rxjs';
-import { WalletService } from '../../core/services/wallet-service';
-import { LedgerService } from '../../core/services/ledger-service';
-import { PaymentService } from '../payment/services/payment-service';
-import { PaymentStatus } from '../payment/model/payment-status';
 import { MatCardModule } from '@angular/material/card';
-import { DashboardService } from './service/DashboardService';
+import { DashboardService } from './service/dashboard-service';
 import { DashboardSummary } from './model/dashboard-summary';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, MatButtonModule, RouterLink, MatCardModule, MatProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    RouterLink,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatTableModule,
+    MatChipsModule,
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -29,6 +31,8 @@ export class Dashboard {
   loading = true;
   errorMessage = '';
   summary?: DashboardSummary;
+
+  displayedColumns: string[] = ['receiver', 'amount', 'status', 'date'];
 
   constructor(
     private tokenService: TokenStorageService,
