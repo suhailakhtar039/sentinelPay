@@ -1,1 +1,55 @@
-<p>transaction-details works!</p>
+<h2 mat-dialog-title>Transaction Details</h2>
+<mat-dialog-content>
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <strong>Ledger ID</strong>
+      <p>{{ transaction.ledgerId }}</p>
+    </div>
+
+    <div>
+      <strong>Payment ID</strong>
+      <p>#{{ transaction.paymentId }}</p>
+    </div>
+
+    <div>
+      <strong>Sender</strong>
+      <p>{{ transaction.senderUserId }}</p>
+    </div>
+
+    <div>
+      <strong>Receiver</strong>
+      <p>{{ transaction.receiverUserId }}</p>
+    </div>
+
+    <div>
+      <strong>Amount</strong>
+      <p>{{ transaction.amount | currency: 'INR' : 'symbol' : '1.0-0' }}</p>
+    </div>
+
+    <div>
+      <strong>Currency</strong>
+      <p>{{ transaction.currency }}</p>
+    </div>
+
+    <div>
+      <strong>Status</strong>
+      <p>{{ transaction.status }}</p>
+    </div>
+
+    <div>
+      <strong>Transaction Time</strong>
+      <p>
+        {{ transaction.transactionTime | date: 'dd MMM yyyy, hh:mm a' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <strong>Remarks</strong>
+    <p class="mt-2 text-gray-600">{{ transaction.remarks || 'No Remarks Available' }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
