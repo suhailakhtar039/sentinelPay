@@ -1,20 +1,32 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { LedgerResponse } from '../model/ledger-response';
 import { LedgerService } from '../service/ledger-service';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-ledger',
-  imports: [CommonModule, MatCardModule, MatTableModule, MatChipsModule, MatProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatTableModule,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+  ],
   templateUrl: './ledger.html',
   styleUrl: './ledger.css',
 })
 export class Ledger {
-  transactions: LedgerResponse[] = [];
+  // transactions: LedgerResponse[] = [];
+  dataSource = new MatTableDataSource<LedgerResponse>([]);
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
 
   loading = true;
 
@@ -35,9 +47,10 @@ export class Ledger {
     this.loading = false;
     this.ledgerService.getMyTransactions().subscribe({
       next: (response) => {
-        this.transactions = response.data;
+        this.dataSource.data = response.data;
         this.loading = false;
         this.cdf.detectChanges();
+        this.dataSource.sort = this.sort;
       },
       error: () => {
         this.loading = false;
