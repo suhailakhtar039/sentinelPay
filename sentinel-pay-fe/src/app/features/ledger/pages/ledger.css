@@ -1,0 +1,11 @@
+.ledger-row {
+  cursor: pointer;
+}
+
+.ledger-row .mat-mdc-cell {
+  transition: background-color 0.25s ease;
+}
+
+.ledger-row:hover .mat-mdc-cell {
+  background-color: #eff6ff !important; /* Light blue */
+}
