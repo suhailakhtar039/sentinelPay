@@ -7,6 +7,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { LedgerResponse } from '../model/ledger-response';
 import { LedgerService } from '../service/ledger-service';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-ledger',
@@ -17,6 +18,7 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatSortModule,
+    MatPaginatorModule,
   ],
   templateUrl: './ledger.html',
   styleUrl: './ledger.css',
@@ -27,6 +29,9 @@ export class Ledger {
 
   @ViewChild(MatSort)
   sort!: MatSort;
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
   loading = true;
 
@@ -44,12 +49,19 @@ export class Ledger {
   }
 
   loadTransaction(): void {
-    this.loading = false;
+    this.loading = true;
+
+    this.errorMessage = '';
+
     this.ledgerService.getMyTransactions().subscribe({
       next: (response) => {
         this.dataSource.data = response.data;
+
         this.loading = false;
+
         this.cdf.detectChanges();
+
+        this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
       error: () => {
