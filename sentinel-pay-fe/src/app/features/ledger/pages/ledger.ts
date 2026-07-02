@@ -8,6 +8,8 @@ import { LedgerResponse } from '../model/ledger-response';
 import { LedgerService } from '../service/ledger-service';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { TransactionDetails } from '../component/transaction-details/transaction-details';
 
 @Component({
   selector: 'app-ledger',
@@ -42,6 +44,7 @@ export class Ledger {
   constructor(
     private ledgerService: LedgerService,
     private cdf: ChangeDetectorRef,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -76,5 +79,13 @@ export class Ledger {
     // Temporary implementation
     // We'll improve this later when the backend provides transaction type.
     return 'Transfer';
+  }
+
+  openTransactionDetails(transaction: LedgerResponse): void {
+    this.dialog.open(TransactionDetails, {
+      width: '700px',
+      maxWidth: '95vw',
+      data: transaction,
+    });
   }
 }
