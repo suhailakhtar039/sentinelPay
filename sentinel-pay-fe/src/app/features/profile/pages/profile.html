@@ -1,1 +1,96 @@
-<p>profile works!</p>
+<div class="p-6">
+  <!-- Page Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold"><mat-icon>person</mat-icon> My Profile</h1>
+    <p class="text-gray-500 mt-1">Manage your personal information.</p>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="flex justify-center py-16">
+      <mat-spinner diameter="45"></mat-spinner>
+    </div>
+  }
+
+  <!-- Content -->
+  @else {
+    <!-- Error -->
+    @if (errorMessage) {
+      <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <!-- Success -->
+    @if (successMessage) {
+      <div class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">
+        {{ successMessage }}
+      </div>
+    }
+
+    <mat-card class="p-8">
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Name -->
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+
+            <input matInput formControlName="name" placeholder="Enter your name" />
+
+            @if (profileForm.controls['name'].invalid && profileForm.controls['name'].touched) {
+              @if (profileForm.controls['name'].hasError('required')) {
+                <mat-error>Name is required.</mat-error>
+              }
+
+              @if (profileForm.controls['name'].hasError('minlength')) {
+                <mat-error> Name must be at least 3 characters. </mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <!-- Email -->
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+
+            <input matInput [value]="profile?.email" readonly />
+          </mat-form-field>
+
+          <!-- Role -->
+          <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+
+            <input matInput [value]="profile?.role" readonly />
+          </mat-form-field>
+
+          <!-- User Id -->
+          <mat-form-field appearance="outline">
+            <mat-label>User ID</mat-label>
+
+            <input matInput [value]="profile?.id" readonly />
+          </mat-form-field>
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-8 flex flex-wrap gap-4">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="saving || profileForm.invalid"
+          >
+            @if (!saving) {
+              Save Changes
+            } @else {
+              Saving...
+            }
+          </button>
+
+          <button mat-stroked-button color="primary" type="button">
+            <mat-icon>lock</mat-icon>
+            Change Password
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  }
+</div>
