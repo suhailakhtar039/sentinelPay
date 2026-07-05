@@ -11,6 +11,8 @@ import { ProfileService } from '../services/profile-service';
 import { finalize } from 'rxjs';
 import { UpdateProfileRequest } from '../models/update-profile-request';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { ChangePassword } from '../component/change-password/change-password';
 
 @Component({
   selector: 'app-profile',
@@ -40,6 +42,7 @@ export class Profile {
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -105,5 +108,30 @@ export class Profile {
           this.errorMessage = 'Unable to update profile';
         },
       });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ChangePassword, {
+      width: '500px',
+      maxWidth: '95vw',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: true,
+      panelClass: 'change-password-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) {
+        return;
+      }
+
+      this.successMessage = 'Password changed successfully.';
+
+      // Future:
+      // this.snackBar.open(...)
+
+      // Future:
+      // Force logout if backend invalidates JWT
+    });
   }
 }
