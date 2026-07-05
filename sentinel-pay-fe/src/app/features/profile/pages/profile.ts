@@ -40,7 +40,6 @@ export class Profile {
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService,
-    private cdf: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
