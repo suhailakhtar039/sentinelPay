@@ -7,6 +7,7 @@ import { PaymentCreate } from './features/payment/pages/payment-create/payment-c
 import { PaymentHistory } from './features/payment/pages/payment-history/payment-history';
 import { Payment } from './features/payment/payment';
 import { WalletPopup } from './features/wallet/pages/wallet-popup/wallet-popup';
+import { Profile } from './features/profile/pages/profile';
 
 export const routes: Route[] = [
   {
@@ -62,9 +63,12 @@ export const routes: Route[] = [
         path: 'wallet/topup',
         component: WalletPopup,
       },
+      {
+        path: 'profile',
+        component: Profile,
+      },
     ],
   },
-
   {
     path: '**',
     redirectTo: 'login',
