@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -60,7 +60,7 @@ export class Profile {
       .pipe(
         finalize(() => {
           this.loading = false;
-          this.cdf.detectChanges();
+          // this.cdf.detectChanges();
         }),
       )
       .subscribe({
@@ -94,17 +94,16 @@ export class Profile {
       .pipe(
         finalize(() => {
           this.saving = false;
+          // this.cdf.detectChanges();
         }),
       )
       .subscribe({
         next: () => {
           this.profile!.name = request.name;
           this.successMessage = 'Profile updated successfully';
-          this.cdf.detectChanges();
         },
         error: () => {
           this.errorMessage = 'Unable to update profile';
-          this.cdf.detectChanges();
         },
       });
   }
