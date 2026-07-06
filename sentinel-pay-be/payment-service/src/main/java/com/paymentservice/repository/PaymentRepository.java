@@ -1,7 +1,9 @@
 package com.paymentservice.repository;
 
 import com.paymentservice.entity.Payment;
+import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,5 +17,16 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             Long senderUserId,
             Long receiverUserId
     );
+
+    @Query(value = """
+        SELECT
+            COUNT(*) AS totalPayments,
+            SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END ) AS successfulPayments,
+            SUM(CASE WHEN status IN ('FAILED', 'FRAUD REJECTED') THEN 1 ELSE 0 END) AS failedPayments,
+            COALESCE(SUM(amount), 0) AS totalVolume,
+            COALESCE(AVG(amount), 0) AS averageTransactionAmount,
+        FROM payments
+            """, nativeQuery = true)
+    OverviewAnalyticsProjection getOverviewAnalytics();
 
 }
