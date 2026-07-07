@@ -7,6 +7,7 @@ import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
 import com.paymentservice.dto.analytics.PaymentStatusResponse;
 import com.paymentservice.dto.analytics.TopReceiverResponse;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
+import com.paymentservice.projection.analytics.PaymentStatusProjection;
 import com.paymentservice.repository.PaymentRepository;
 import com.paymentservice.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,14 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public List<PaymentStatusResponse> getPaymentStatusDistribution() {
-        return List.of();
+        return paymentRepository.getPaymentStatusDistribution()
+                .stream()
+                .map(projection -> new PaymentStatusResponse(
+                        projection.getStatus(),
+                        projection.getCount()
+                ))
+                .toList();
+
     }
 
     @Override
