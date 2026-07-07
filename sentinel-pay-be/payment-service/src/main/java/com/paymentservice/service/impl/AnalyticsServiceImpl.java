@@ -29,6 +29,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 projection.getTotalPayments(),
                 projection.getSuccessfulPayments(),
                 projection.getFailedPayments(),
+                projection.getPendingPayments(),
                 projection.getTotalVolume(),
                 projection.getAverageTransactionAmount()
         );
