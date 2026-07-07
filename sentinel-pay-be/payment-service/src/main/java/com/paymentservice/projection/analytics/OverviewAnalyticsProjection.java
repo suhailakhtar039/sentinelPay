@@ -6,6 +6,7 @@ public interface OverviewAnalyticsProjection {
     Long getTotalPayments();
     Long getSuccessfulPayments();
     Long getFailedPayments();
+    Long getPendingPayments();
     BigDecimal getTotalVolume();
     BigDecimal getAverageTransactionAmount();
 }

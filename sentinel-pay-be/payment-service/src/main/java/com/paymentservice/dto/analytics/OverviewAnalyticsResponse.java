@@ -15,6 +15,7 @@ public class OverviewAnalyticsResponse {
     long totalPayments;
     long successfulPayments;
     long failedPayments;
+    long pendingPayments;
     BigDecimal totalVolume;
     BigDecimal averageTransactionAmount;
 }
