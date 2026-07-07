@@ -23,8 +23,9 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             COUNT(*) AS totalPayments,
             SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END ) AS successfulPayments,
             SUM(CASE WHEN status IN ('FAILED', 'FRAUD REJECTED') THEN 1 ELSE 0 END) AS failedPayments,
+            SUM(CASE WHEN status='PENDING' THEN 1 ELSE 0 END) AS pendingPayments,
             COALESCE(SUM(amount), 0) AS totalVolume,
-            COALESCE(AVG(amount), 0) AS averageTransactionAmount,
+            COALESCE(AVG(amount), 0) AS averageTransactionAmount
         FROM payments
             """, nativeQuery = true)
     OverviewAnalyticsProjection getOverviewAnalytics();
