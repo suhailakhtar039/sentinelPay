@@ -1,4 +1,61 @@
 package com.paymentservice.service.impl;
 
-public class AnalyticsServiceImpl {
+import com.paymentservice.dto.analytics.AverageAmountResponse;
+import com.paymentservice.dto.analytics.DailyTransactionResponse;
+import com.paymentservice.dto.analytics.MonthlyVolumeResponse;
+import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
+import com.paymentservice.dto.analytics.PaymentStatusResponse;
+import com.paymentservice.dto.analytics.TopReceiverResponse;
+import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
+import com.paymentservice.repository.PaymentRepository;
+import com.paymentservice.service.AnalyticsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class AnalyticsServiceImpl implements AnalyticsService {
+
+    private final PaymentRepository paymentRepository;
+
+    @Override
+    public OverviewAnalyticsResponse getOverviewAnalytics() {
+        OverviewAnalyticsProjection projection =
+                paymentRepository.getOverviewAnalytics();
+
+        return new OverviewAnalyticsResponse(
+                projection.getTotalPayments(),
+                projection.getSuccessfulPayments(),
+                projection.getFailedPayments(),
+                projection.getTotalVolume(),
+                projection.getAverageTransactionAmount()
+        );
+    }
+
+    @Override
+    public List<DailyTransactionResponse> getDailyTransactions() {
+        return List.of();
+    }
+
+    @Override
+    public List<MonthlyVolumeResponse> getMonthly() {
+        return List.of();
+    }
+
+    @Override
+    public List<PaymentStatusResponse> getPaymentStatusDistribution() {
+        return List.of();
+    }
+
+    @Override
+    public List<TopReceiverResponse> getTopReceivers() {
+        return List.of();
+    }
+
+    @Override
+    public AverageAmountResponse getAverageTransactionResponse() {
+        return null;
+    }
 }
