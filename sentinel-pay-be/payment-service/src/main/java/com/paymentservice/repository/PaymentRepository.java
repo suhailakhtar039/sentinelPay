@@ -4,6 +4,7 @@ import com.paymentservice.entity.Payment;
 import com.paymentservice.projection.analytics.AverageAmountProjection;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
 import com.paymentservice.projection.analytics.PaymentStatusProjection;
+import com.paymentservice.projection.analytics.TopReceiverProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -52,5 +53,19 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             payments;
 """, nativeQuery = true)
     AverageAmountProjection getAverageTransaction();
+
+    @Query(value = """
+    SELECT
+        receiver_user_id AS receiverId,
+        SUM(amount) AS totalReceived,
+        COUNT(*) AS transactionCount
+    FROM payments
+    WHERE status = 'COMPLETED'
+    GROUP BY receiver_user_id
+    ORDER BY totalReceived DESC
+    LIMIT 5
+    """,
+            nativeQuery = true)
+    List<TopReceiverProjection> getTopReceivers();
 
 }
