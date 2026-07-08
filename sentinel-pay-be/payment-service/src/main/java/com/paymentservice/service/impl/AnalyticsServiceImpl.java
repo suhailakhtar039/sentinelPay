@@ -9,6 +9,7 @@ import com.paymentservice.dto.analytics.TopReceiverResponse;
 import com.paymentservice.projection.analytics.AverageAmountProjection;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
 import com.paymentservice.projection.analytics.PaymentStatusProjection;
+import com.paymentservice.projection.analytics.TopReceiverProjection;
 import com.paymentservice.repository.PaymentRepository;
 import com.paymentservice.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public List<TopReceiverResponse> getTopReceivers() {
-        return List.of();
+        List<TopReceiverProjection> topReceivers = paymentRepository.getTopReceivers();
+        return topReceivers
+                .stream()
+                .map(value -> new TopReceiverResponse(
+                        value.getReceiverId(),
+                        value.getTotalReceived(),
+                        value.getTransactionCount()
+                ))
+                .toList();
     }
 
     @Override
