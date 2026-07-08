@@ -1,5 +1,6 @@
 package com.paymentservice.controller;
 
+import com.paymentservice.dto.analytics.AverageAmountResponse;
 import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
 import com.paymentservice.dto.analytics.PaymentStatusResponse;
 import com.paymentservice.service.AnalyticsService;
@@ -34,6 +35,16 @@ public class AnalyticsController {
                 .success(true)
                 .message("Payment status distribution fetched successfully")
                 .data(analyticsService.getPaymentStatusDistribution())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @GetMapping("/average-amount")
+    public ApiResponse<AverageAmountResponse> getAverageTransactionAmount(){
+        return ApiResponse.<AverageAmountResponse>builder()
+                .success(true)
+                .message("Average transaction amount fetched successfully")
+                .data(analyticsService.getAverageTransactionResponse())
                 .timestamp(LocalDateTime.now())
                 .build();
     }
