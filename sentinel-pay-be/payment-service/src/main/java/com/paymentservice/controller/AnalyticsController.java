@@ -3,6 +3,7 @@ package com.paymentservice.controller;
 import com.paymentservice.dto.analytics.AverageAmountResponse;
 import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
 import com.paymentservice.dto.analytics.PaymentStatusResponse;
+import com.paymentservice.dto.analytics.TopReceiverResponse;
 import com.paymentservice.service.AnalyticsService;
 import com.sentinelpay.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,17 @@ public class AnalyticsController {
                 .success(true)
                 .message("Average transaction amount fetched successfully")
                 .data(analyticsService.getAverageTransactionResponse())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @GetMapping("/top-receivers")
+    public ApiResponse<List<TopReceiverResponse>> getTopReceivers() {
+
+        return ApiResponse.<List<TopReceiverResponse>>builder()
+                .success(true)
+                .message("Top receivers fetched successfully")
+                .data(analyticsService.getTopReceivers())
                 .timestamp(LocalDateTime.now())
                 .build();
     }
