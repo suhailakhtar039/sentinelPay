@@ -6,14 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class TopReceiverResponse {
-    UUID receiverId;
+    long receiverId;
     BigDecimal totalReceived;
     long transactionCount;
 }
