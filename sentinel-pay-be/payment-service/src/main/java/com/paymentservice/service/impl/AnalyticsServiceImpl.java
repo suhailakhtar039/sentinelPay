@@ -6,6 +6,7 @@ import com.paymentservice.dto.analytics.MonthlyVolumeResponse;
 import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
 import com.paymentservice.dto.analytics.PaymentStatusResponse;
 import com.paymentservice.dto.analytics.TopReceiverResponse;
+import com.paymentservice.projection.analytics.AverageAmountProjection;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
 import com.paymentservice.projection.analytics.PaymentStatusProjection;
 import com.paymentservice.repository.PaymentRepository;
@@ -65,6 +66,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public AverageAmountResponse getAverageTransactionResponse() {
-        return null;
+        AverageAmountProjection averageTransaction = paymentRepository.getAverageTransaction();
+        return new AverageAmountResponse(averageTransaction.getAverageAmount());
     }
 }
