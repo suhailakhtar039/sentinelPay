@@ -1,6 +1,7 @@
 package com.paymentservice.repository;
 
 import com.paymentservice.entity.Payment;
+import com.paymentservice.projection.analytics.AverageAmountProjection;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
 import com.paymentservice.projection.analytics.PaymentStatusProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,5 +41,16 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
                         ORDER BY count DESC
             """, nativeQuery = true)
     List<PaymentStatusProjection> getPaymentStatusDistribution();
+
+    @Query(value = """
+        SELECT
+            COALESCE(AVG(CASE
+                        WHEN status = 'COMPLETED' THEN amount
+                    END),
+                    0) AS averageAmount
+        FROM
+            payments;
+""", nativeQuery = true)
+    AverageAmountProjection getAverageTransaction();
 
 }
