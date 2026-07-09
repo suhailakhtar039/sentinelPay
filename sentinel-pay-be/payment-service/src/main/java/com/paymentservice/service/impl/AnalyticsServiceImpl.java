@@ -50,7 +50,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public List<MonthlyVolumeResponse> getMonthly() {
-        return List.of();
+        return paymentRepository.getMonthlyTransaction()
+                .stream()
+                .map(projection ->
+                        new MonthlyVolumeResponse(
+                                projection.getYear(),
+                                projection.getMonth(),
+                                projection.getTotalVolume()))
+                .toList();
+
     }
 
     @Override
