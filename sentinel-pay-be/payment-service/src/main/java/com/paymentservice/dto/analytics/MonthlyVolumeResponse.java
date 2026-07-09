@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MonthlyVolumeResponse {
-    String month;
+    Integer year;
+    Integer month;
     BigDecimal totalVolume;
 }
