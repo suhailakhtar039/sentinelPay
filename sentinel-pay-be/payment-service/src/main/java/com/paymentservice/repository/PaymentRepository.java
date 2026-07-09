@@ -3,6 +3,7 @@ package com.paymentservice.repository;
 import com.paymentservice.entity.Payment;
 import com.paymentservice.projection.analytics.AverageAmountProjection;
 import com.paymentservice.projection.analytics.DailyTransactionProjection;
+import com.paymentservice.projection.analytics.MonthlyVolumeProjection;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
 import com.paymentservice.projection.analytics.PaymentStatusProjection;
 import com.paymentservice.projection.analytics.TopReceiverProjection;
@@ -79,4 +80,18 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             ORDER BY DATE(created_at) ASC;
             """, nativeQuery = true)
     List<DailyTransactionProjection> getDailyTransaction();
+
+
+    @Query(value = """
+                    SELECT
+                        YEAR(created_at) AS year,
+                        MONTH(created_at) AS month,
+                        SUM(amount) AS totalVolume
+                    FROM payments
+                    WHERE status = 'COMPLETED'
+                    GROUP BY YEAR(created_at), MONTH(created_at)
+                    ORDER BY YEAR(created_at), MONTH(created_at) ASC;
+            """, nativeQuery = true)
+    List<MonthlyVolumeProjection> getMonthlyTransaction();
+
 }
