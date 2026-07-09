@@ -2,13 +2,13 @@ package com.paymentservice.controller;
 
 import com.paymentservice.dto.analytics.AverageAmountResponse;
 import com.paymentservice.dto.analytics.DailyTransactionResponse;
+import com.paymentservice.dto.analytics.MonthlyVolumeResponse;
 import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
 import com.paymentservice.dto.analytics.PaymentStatusResponse;
 import com.paymentservice.dto.analytics.TopReceiverResponse;
 import com.paymentservice.service.AnalyticsService;
 import com.sentinelpay.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.shaded.com.google.protobuf.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,11 +64,22 @@ public class AnalyticsController {
     }
 
     @GetMapping("/daily-transactions")
-    public ApiResponse<List<DailyTransactionResponse>> getDailyTransactions(){
+    public ApiResponse<List<DailyTransactionResponse>> getDailyTransactions() {
         return ApiResponse.<List<DailyTransactionResponse>>builder()
                 .success(true)
                 .message("Daily transactions fetched successfully")
                 .data(analyticsService.getDailyTransactions())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @GetMapping("/monthly-volume")
+    public ApiResponse<List<MonthlyVolumeResponse>> getMonthlyVolume() {
+
+        return ApiResponse.<List<MonthlyVolumeResponse>>builder()
+                .success(true)
+                .message("Monthly payment volume fetched successfully")
+                .data(analyticsService.getMonthly())
                 .timestamp(LocalDateTime.now())
                 .build();
     }
