@@ -8,7 +8,6 @@ import com.paymentservice.dto.analytics.PaymentStatusResponse;
 import com.paymentservice.dto.analytics.TopReceiverResponse;
 import com.paymentservice.projection.analytics.AverageAmountProjection;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
-import com.paymentservice.projection.analytics.PaymentStatusProjection;
 import com.paymentservice.projection.analytics.TopReceiverProjection;
 import com.paymentservice.repository.PaymentRepository;
 import com.paymentservice.service.AnalyticsService;
@@ -40,7 +39,13 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public List<DailyTransactionResponse> getDailyTransactions() {
-        return List.of();
+        return paymentRepository.getDailyTransaction()
+                .stream()
+                .map(dailyTransactionProjection ->
+                        new DailyTransactionResponse(
+                                dailyTransactionProjection.getDate(),
+                                dailyTransactionProjection.getTransactionCount()))
+                .toList();
     }
 
     @Override
