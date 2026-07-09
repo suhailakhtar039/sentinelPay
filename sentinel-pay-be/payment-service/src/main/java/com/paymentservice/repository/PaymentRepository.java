@@ -2,6 +2,7 @@ package com.paymentservice.repository;
 
 import com.paymentservice.entity.Payment;
 import com.paymentservice.projection.analytics.AverageAmountProjection;
+import com.paymentservice.projection.analytics.DailyTransactionProjection;
 import com.paymentservice.projection.analytics.OverviewAnalyticsProjection;
 import com.paymentservice.projection.analytics.PaymentStatusProjection;
 import com.paymentservice.projection.analytics.TopReceiverProjection;
@@ -68,4 +69,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             nativeQuery = true)
     List<TopReceiverProjection> getTopReceivers();
 
+    @Query(value = """
+            SELECT 
+                    DATE(created_at) AS date,
+                    COUNT(*) AS transactionCount
+                FROM
+                    payments
+            GROUP BY DATE(created_at)
+            ORDER BY DATE(created_at) ASC;
+            """, nativeQuery = true)
+    List<DailyTransactionProjection> getDailyTransaction();
 }
