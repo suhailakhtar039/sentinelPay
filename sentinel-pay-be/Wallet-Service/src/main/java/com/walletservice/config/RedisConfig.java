@@ -1,5 +1,6 @@
 package com.walletservice.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,19 +16,30 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.walletservice.config.CacheNames.ANALYTICS;
+import static com.walletservice.config.CacheNames.PROFILE;
+import static com.walletservice.config.CacheNames.WALLET;
+
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(
+            RedisConnectionFactory connectionFactory,
+            StringRedisSerializer stringRedisSerializer,
+            GenericJackson2JsonRedisSerializer redisSerializer
+    ) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
 
         template.setConnectionFactory(connectionFactory);
 
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setKeySerializer(stringRedisSerializer);
+        template.setHashKeySerializer(stringRedisSerializer);
 
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(redisSerializer);
+        template.setHashValueSerializer(redisSerializer);
+
+        // Optional but recommended
+        template.setDefaultSerializer(redisSerializer);
 
         template.afterPropertiesSet();
 
@@ -35,7 +47,10 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisCacheConfiguration redisCacheConfiguration() {
+    public RedisCacheConfiguration redisCacheConfiguration(
+            StringRedisSerializer stringRedisSerializer,
+            GenericJackson2JsonRedisSerializer redisSerializer
+    ) {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(5))
 
@@ -43,39 +58,52 @@ public class RedisConfig {
 
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair
-                                .fromSerializer(new StringRedisSerializer())
+                                .fromSerializer(stringRedisSerializer)
                 )
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair
-                                .fromSerializer(new GenericJackson2JsonRedisSerializer())
+                                .fromSerializer(redisSerializer)
                 );
     }
 
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+    public CacheManager cacheManager(
+            RedisConnectionFactory connectionFactory,
+            RedisCacheConfiguration redisCacheConfiguration
+    ) {
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
 
-        cacheConfiguration.put("wallet",
-                redisCacheConfiguration()
+        cacheConfiguration.put(WALLET,
+                redisCacheConfiguration
                         .entryTtl(Duration.ofSeconds(60)));
 
         cacheConfiguration.put(
-                "analytics",
-                redisCacheConfiguration()
+                ANALYTICS,
+                redisCacheConfiguration
                         .entryTtl(Duration.ofMinutes(5))
         );
 
         cacheConfiguration.put(
-                "profile",
-                redisCacheConfiguration()
+                PROFILE,
+                redisCacheConfiguration
                         .entryTtl(Duration.ofMinutes(30))
         );
 
         return RedisCacheManager.builder(connectionFactory)
-                .cacheDefaults(redisCacheConfiguration())
+                .cacheDefaults(redisCacheConfiguration)
                 .withInitialCacheConfigurations(cacheConfiguration)
                 .transactionAware().build();
     }
 
+    @Bean
+    public GenericJackson2JsonRedisSerializer redisSerializer(
+            ObjectMapper objectMapper) {
 
+        return new GenericJackson2JsonRedisSerializer(objectMapper);
+    }
+
+    @Bean
+    public StringRedisSerializer stringRedisSerializer() {
+        return new StringRedisSerializer();
+    }
 }
