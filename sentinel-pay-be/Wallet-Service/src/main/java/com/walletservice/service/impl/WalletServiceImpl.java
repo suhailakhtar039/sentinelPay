@@ -56,13 +56,7 @@ public class WalletServiceImpl implements WalletService {
         Wallet wallet = repository.findByUserId(userId)
                 .orElseThrow(() -> new WalletNotFoundException("Wallet Not Found"));
 
-        return WalletResponse.builder()
-                .walletId(wallet.getWalletId())
-                .userId(wallet.getUserId())
-                .balance(wallet.getBalance())
-                .currency(wallet.getCurrency())
-                .status(wallet.getStatus().name())
-                .build();
+        return mapToResponse(wallet);
     }
 
     @Override
@@ -115,14 +109,18 @@ public class WalletServiceImpl implements WalletService {
         wallet.setBalance(wallet.getBalance().add(request.getAmount()));
         Wallet updated = repository.save(wallet);
 
-        return WalletResponse.builder()
-                .walletId(updated.getWalletId())
-                .userId(updated.getUserId())
-                .balance(updated.getBalance())
-                .currency(updated.getCurrency())
-                .status(updated.getStatus().name())
-                .build();
+        return mapToResponse(updated);
 
+    }
+
+    private WalletResponse mapToResponse(Wallet wallet) {
+        return WalletResponse.builder()
+                .walletId(wallet.getWalletId())
+                .userId(wallet.getUserId())
+                .balance(wallet.getBalance())
+                .currency(wallet.getCurrency())
+                .status(wallet.getStatus().name())
+                .build();
     }
 
 }
