@@ -14,10 +14,14 @@ import com.walletservice.repository.WalletRepository;
 import com.walletservice.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+
+import static com.walletservice.config.CacheNames.WALLET;
 
 @Service
 @RequiredArgsConstructor
@@ -42,17 +46,15 @@ public class WalletServiceImpl implements WalletService {
                 .build();
         repository.save(wallet);
         log.info("Wallet created for user id {}", userId);
-//        return WalletResponse.builder()
-//                .walletId(wallet.getWalletId())
-//                .balance(wallet.getBalance())
-//                .userId(wallet.getUserId())
-//                .currency(wallet.getCurrency())
-//                .status(wallet.getStatus().name())
-//                .build();
     }
 
+    @Cacheable(
+            cacheNames = WALLET,
+            key = "#userId"
+    )
     @Override
     public WalletResponse getWalletByUserId(Long userId) {
+        log.info("Fetching wallet from MySQL for user {}", userId);
         Wallet wallet = repository.findByUserId(userId)
                 .orElseThrow(() -> new WalletNotFoundException("Wallet Not Found"));
 
@@ -61,6 +63,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
     public void debit(Long userId, BigDecimal amount) {
         Wallet wallet = repository.findByUserId(userId)
                 .orElseThrow(() ->
@@ -74,6 +77,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
     public void credit(Long userId, BigDecimal amount) {
         Wallet wallet = repository.findByUserId(userId)
                 .orElseThrow(() ->
@@ -100,6 +104,7 @@ public class WalletServiceImpl implements WalletService {
         walletEventProducer.publishPaymentCompleted(paymentCompletedEvent);
     }
 
+    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
     @Override
     @Transactional
     public WalletResponse createTopUp(Long userId, WalletTopUpRequest request) {
