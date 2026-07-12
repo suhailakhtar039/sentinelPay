@@ -14,6 +14,8 @@ import com.walletservice.repository.WalletRepository;
 import com.walletservice.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import static com.walletservice.config.CacheNames.WALLET;
 public class WalletServiceImpl implements WalletService {
     private final WalletRepository repository;
     private final WalletEventProducer walletEventProducer;
+    private final CacheManager cacheManager;
 
     @Override
     @Transactional
@@ -48,10 +51,7 @@ public class WalletServiceImpl implements WalletService {
         log.info("Wallet created for user id {}", userId);
     }
 
-    @Cacheable(
-            cacheNames = WALLET,
-            key = "#userId"
-    )
+    @Cacheable(cacheNames = WALLET, key = "#userId")
     @Override
     public WalletResponse getWalletByUserId(Long userId) {
         log.info("Fetching wallet from MySQL for user {}", userId);
@@ -63,7 +63,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
+//    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
     public void debit(Long userId, BigDecimal amount) {
         Wallet wallet = repository.findByUserId(userId)
                 .orElseThrow(() ->
@@ -73,11 +73,12 @@ public class WalletServiceImpl implements WalletService {
             throw new BadRequestException("Insufficient Balance");
         }
         wallet.setBalance(wallet.getBalance().subtract(amount));
+        evictWalletCache(userId);
     }
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
+//    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
     public void credit(Long userId, BigDecimal amount) {
         Wallet wallet = repository.findByUserId(userId)
                 .orElseThrow(() ->
@@ -85,6 +86,7 @@ public class WalletServiceImpl implements WalletService {
 
         wallet.setBalance(wallet.getBalance().add(amount));
 
+        evictWalletCache(userId);
     }
 
     @Transactional
@@ -104,7 +106,7 @@ public class WalletServiceImpl implements WalletService {
         walletEventProducer.publishPaymentCompleted(paymentCompletedEvent);
     }
 
-    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
+    //    @CacheEvict(cacheNames = WALLET, key="#userId", beforeInvocation = false)
     @Override
     @Transactional
     public WalletResponse createTopUp(Long userId, WalletTopUpRequest request) {
@@ -114,8 +116,9 @@ public class WalletServiceImpl implements WalletService {
         wallet.setBalance(wallet.getBalance().add(request.getAmount()));
         Wallet updated = repository.save(wallet);
 
-        return mapToResponse(updated);
+        evictWalletCache(userId);
 
+        return mapToResponse(updated);
     }
 
     private WalletResponse mapToResponse(Wallet wallet) {
@@ -128,4 +131,12 @@ public class WalletServiceImpl implements WalletService {
                 .build();
     }
 
+    private void evictWalletCache(Long userId) {
+        Cache cache = cacheManager.getCache(WALLET);
+
+        if (cache != null) {
+            cache.evict(userId);
+            log.info("Evicted wallet cache for user {}", userId);
+        }
+    }
 }
