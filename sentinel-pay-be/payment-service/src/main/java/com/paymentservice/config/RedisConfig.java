@@ -74,20 +74,10 @@ public class RedisConfig {
     ) {
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
 
-        cacheConfiguration.put(WALLET,
-                redisCacheConfiguration
-                        .entryTtl(Duration.ofSeconds(60)));
-
         cacheConfiguration.put(
                 ANALYTICS,
                 redisCacheConfiguration
                         .entryTtl(Duration.ofMinutes(5))
-        );
-
-        cacheConfiguration.put(
-                PROFILE,
-                redisCacheConfiguration
-                        .entryTtl(Duration.ofMinutes(30))
         );
 
         return RedisCacheManager.builder(connectionFactory)
