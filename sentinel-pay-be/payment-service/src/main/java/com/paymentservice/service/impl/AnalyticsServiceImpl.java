@@ -12,9 +12,12 @@ import com.paymentservice.projection.analytics.TopReceiverProjection;
 import com.paymentservice.repository.PaymentRepository;
 import com.paymentservice.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.paymentservice.config.CacheNames.ANALYTICS;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     private final PaymentRepository paymentRepository;
 
     @Override
+    @Cacheable(cacheNames = ANALYTICS, key = "'overview'")
     public OverviewAnalyticsResponse getOverviewAnalytics() {
         OverviewAnalyticsProjection projection =
                 paymentRepository.getOverviewAnalytics();
@@ -38,6 +42,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
+    @Cacheable(cacheNames = ANALYTICS, key = "'daily-transactions'")
     public List<DailyTransactionResponse> getDailyTransactions() {
         return paymentRepository.getDailyTransaction()
                 .stream()
@@ -49,6 +54,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
+    @Cacheable(cacheNames = ANALYTICS,key = "'monthly-volume'")
     public List<MonthlyVolumeResponse> getMonthly() {
         return paymentRepository.getMonthlyTransaction()
                 .stream()
@@ -62,6 +68,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
+    @Cacheable(cacheNames = ANALYTICS, key = "'payment-status'")
     public List<PaymentStatusResponse> getPaymentStatusDistribution() {
         return paymentRepository.getPaymentStatusDistribution()
                 .stream()
@@ -74,6 +81,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
+    @Cacheable(cacheNames = ANALYTICS, key="'top-receivers'")
     public List<TopReceiverResponse> getTopReceivers() {
         List<TopReceiverProjection> topReceivers = paymentRepository.getTopReceivers();
         return topReceivers
@@ -87,6 +95,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
+    @Cacheable(cacheNames = ANALYTICS, key = "'average-amount'")
     public AverageAmountResponse getAverageTransactionResponse() {
         AverageAmountProjection averageTransaction = paymentRepository.getAverageTransaction();
         return new AverageAmountResponse(averageTransaction.getAverageAmount());
