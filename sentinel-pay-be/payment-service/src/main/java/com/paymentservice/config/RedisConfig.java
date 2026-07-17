@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.paymentservice.config.CacheNames.ANALYTICS;
-import static com.paymentservice.config.CacheNames.PROFILE;
-import static com.paymentservice.config.CacheNames.WALLET;
 
 
 @Configuration
