@@ -77,8 +77,20 @@ public class JwtService {
     /**
      * extracting jti so we can check whether it lies in blacklisting or not
      */
-    public String extractJti(String token){
+    public String extractJti(String token) {
         return extractAllClaims(token).getId();
+    }
+
+    /**
+     * Get remaining time left for expiration of token. It'll be used in redis.
+     *
+     * @param token
+     * @return ttl(Time To Live)
+     */
+    public long getRemainingValidity(String token) {
+        Claims claims = extractAllClaims(token);
+
+        return claims.getExpiration().getTime() - System.currentTimeMillis();
     }
 
     /**
