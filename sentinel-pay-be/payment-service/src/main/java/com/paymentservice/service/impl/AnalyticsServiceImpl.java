@@ -26,7 +26,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'overview'")
+    @Cacheable(cacheNames = ANALYTICS, key = "'overview'", sync = true)
     public OverviewAnalyticsResponse getOverviewAnalytics() {
         OverviewAnalyticsProjection projection =
                 paymentRepository.getOverviewAnalytics();
@@ -42,7 +42,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'daily-transactions'")
+    @Cacheable(cacheNames = ANALYTICS, key = "'daily-transactions'", sync = true)
     public List<DailyTransactionResponse> getDailyTransactions() {
         return paymentRepository.getDailyTransaction()
                 .stream()
@@ -54,7 +54,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS,key = "'monthly-volume'")
+    @Cacheable(cacheNames = ANALYTICS, key = "'monthly-volume'", sync = true)
     public List<MonthlyVolumeResponse> getMonthly() {
         return paymentRepository.getMonthlyTransaction()
                 .stream()
@@ -68,7 +68,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'payment-status'")
+    @Cacheable(cacheNames = ANALYTICS, key = "'payment-status'", sync = true)
     public List<PaymentStatusResponse> getPaymentStatusDistribution() {
         return paymentRepository.getPaymentStatusDistribution()
                 .stream()
@@ -81,7 +81,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key="'top-receivers'")
+    @Cacheable(cacheNames = ANALYTICS, key = "'top-receivers'", sync = true)
     public List<TopReceiverResponse> getTopReceivers() {
         List<TopReceiverProjection> topReceivers = paymentRepository.getTopReceivers();
         return topReceivers
@@ -95,7 +95,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'average-amount'")
+    @Cacheable(cacheNames = ANALYTICS, key = "'average-amount'", sync = true)
     public AverageAmountResponse getAverageTransactionResponse() {
         AverageAmountProjection averageTransaction = paymentRepository.getAverageTransaction();
         return new AverageAmountResponse(averageTransaction.getAverageAmount());
