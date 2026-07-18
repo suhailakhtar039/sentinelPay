@@ -75,6 +75,13 @@ public class JwtService {
     }
 
     /**
+     * extracting jti so we can check whether it lies in blacklisting or not
+     */
+    public String extractJti(String token){
+        return extractAllClaims(token).getId();
+    }
+
+    /**
      * Check expiration of token
      */
     private boolean isTokenExpired(String token) {
