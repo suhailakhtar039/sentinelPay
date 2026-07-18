@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -27,7 +28,9 @@ public class JwtService {
      * Take care of claims thoroughly
      */
     public String generateToken(Long userId, String email, String role) {
+        String jti = UUID.randomUUID().toString();
         return Jwts.builder()
+                .setId(jti)
                 .setSubject(email)
                 .claim("role", role)
                 .claim("userId", userId)
