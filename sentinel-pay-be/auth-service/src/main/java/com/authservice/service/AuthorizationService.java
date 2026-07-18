@@ -24,8 +24,8 @@ public class AuthorizationService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final WalletClient walletClient;
     private final UserEventProducer userEventProducer;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Transactional
     public RegisterResponse register(RegisterRequest request) {
@@ -90,5 +90,24 @@ public class AuthorizationService {
                 .userId(userId)
                 .role(role)
                 .build();
+    }
+
+    public void logout(String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization header");
+        }
+
+        String token = authHeader.substring(7);
+
+        String jti = jwtService.extractJti(token);
+
+        long remainingValidity =
+                jwtService.getRemainingValidity(token);
+
+        tokenBlacklistService.blacklistToken(
+                jti,
+                remainingValidity
+        );
     }
 }
