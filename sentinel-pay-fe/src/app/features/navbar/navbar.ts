@@ -26,7 +26,18 @@ export class Navbar {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      next: () => {
+        this.tokenService.logout();
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // Even if logout fails (e.g. token already expired),
+        // clear local session so the user is logged out locally.
+        this.tokenService.logout();
+        this.router.navigate(['/login']);
+      },
+    });
     this.router.navigate(['/login']);
   }
 }
