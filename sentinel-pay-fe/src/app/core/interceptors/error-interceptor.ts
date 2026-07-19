@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { TokenStorageService } from '../services/token-storage';
 import { catchError, throwError } from 'rxjs';
 
-export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const tokenStorage = inject(TokenStorageService);
 
