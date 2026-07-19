@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { TokenStorageService } from '../../core/services/token-storage';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { DashboardService } from './service/dashboard-service';
 import { DashboardSummary } from './model/dashboard-summary';
@@ -36,7 +36,6 @@ export class Dashboard {
 
   constructor(
     private tokenService: TokenStorageService,
-    private router: Router,
     private dashboardService: DashboardService,
     private cdf: ChangeDetectorRef,
   ) {}
@@ -63,10 +62,5 @@ export class Dashboard {
         this.cdf.detectChanges();
       },
     });
-  }
-
-  logout() {
-    this.tokenService.logout();
-    this.router.navigate(['/login']);
   }
 }
