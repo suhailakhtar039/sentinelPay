@@ -7,6 +7,7 @@ import { LoginResponse } from '../../shared/models/login-response';
 import { API_CONFIG } from '../config/api.config';
 import { RegisterRequest } from '../../shared/models/register-request';
 import { RegisterResponse } from '../../shared/models/register-response';
+import { ApiResponse } from '../../shared/models/api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +28,8 @@ export class AuthService {
     return this.http.post<RegisterResponse>(`${API_CONFIG.auth}/register`, request);
   }
 
-  logout(): void {
-    this.tokenStorage.logout();
+  logout(): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${API_CONFIG.auth}/logout`, {});
   }
 
   isLoggedIn(): boolean {
