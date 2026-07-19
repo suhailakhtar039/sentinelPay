@@ -1,6 +1,8 @@
 package com.walletservice.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -96,9 +98,14 @@ public class RedisConfig {
     }
 
     @Bean
-    public GenericJackson2JsonRedisSerializer redisSerializer(
-            ObjectMapper objectMapper) {
-
+    public GenericJackson2JsonRedisSerializer redisSerializer() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+        objectMapper.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY
+        );
         return new GenericJackson2JsonRedisSerializer(objectMapper);
     }
 
