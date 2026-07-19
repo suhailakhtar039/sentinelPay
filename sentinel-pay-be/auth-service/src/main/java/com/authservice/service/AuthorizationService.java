@@ -77,19 +77,33 @@ public class AuthorizationService {
     }
 
     public TokenValidationResponse validateToken(String token) {
-        String email = jwtService.extractUsername(token);
-        Long userId = jwtService.extractUserId(token);
-        String role = jwtService.extractRole(token);
 
-        boolean valid =
-                jwtService.validateToken(token, email);
+        try {
 
-        return TokenValidationResponse.builder()
-                .valid(valid)
-                .email(email)
-                .userId(userId)
-                .role(role)
-                .build();
+            String email = jwtService.extractUsername(token);
+            Long userId = jwtService.extractUserId(token);
+            String role = jwtService.extractRole(token);
+            String jti = jwtService.extractJti(token);
+
+            boolean blacklisted = tokenBlacklistService.isBlacklisted(jti);
+
+            boolean valid =
+                    jwtService.validateToken(token, email)
+                            && !blacklisted;
+
+            return TokenValidationResponse.builder()
+                    .valid(valid)
+                    .email(email)
+                    .userId(userId)
+                    .role(role)
+                    .build();
+
+        } catch (Exception ex) {
+
+            return TokenValidationResponse.builder()
+                    .valid(false)
+                    .build();
+        }
     }
 
     public void logout(String authHeader) {
