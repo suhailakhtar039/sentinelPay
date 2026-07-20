@@ -15,7 +15,15 @@ export class SessionService {
 
   private sessionExpiredHandled = false;
 
-  logout() {
+  logout(): void {
+    this.sessionExpiredHandled = false;
+
+    this.tokenStorage.logout();
+
+    this.router.navigate(['/login']);
+  }
+
+  sessionExpired(): void {
     if (this.sessionExpiredHandled) {
       return;
     }
@@ -24,7 +32,7 @@ export class SessionService {
 
     this.tokenStorage.logout();
 
-    this.snackBar.open('Your session has expired. Please login again', 'Close', {
+    this.snackBar.open('Your session has expired. Please login again.', 'Close', {
       duration: 4000,
     });
 
