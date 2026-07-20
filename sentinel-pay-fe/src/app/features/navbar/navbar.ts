@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { TokenStorageService } from '../../core/services/token-storage';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../core/services/auth';
+import { SessionService } from '../../core/services/session-service';
 
 @Component({
   selector: 'app-navbar',
@@ -20,6 +21,7 @@ export class Navbar {
     private tokenService: TokenStorageService,
     private authService: AuthService,
     private router: Router,
+    private sessionService: SessionService,
   ) {}
   ngOnInit() {
     this.email = this.tokenService.getEmail();
@@ -28,14 +30,12 @@ export class Navbar {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        this.tokenService.logout();
-        this.router.navigate(['/login']);
+        this.sessionService.logout();
       },
       error: () => {
         // Even if logout fails (e.g. token already expired),
         // clear local session so the user is logged out locally.
-        this.tokenService.logout();
-        this.router.navigate(['/login']);
+        this.sessionService.logout();
       },
     });
     this.router.navigate(['/login']);
