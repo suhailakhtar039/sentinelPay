@@ -2,6 +2,7 @@ package com.paymentservice.controller;
 
 import com.paymentservice.dto.analytics.AverageAmountResponse;
 import com.paymentservice.dto.analytics.DailyTransactionResponse;
+import com.paymentservice.dto.analytics.DashboardAnalyticsResponse;
 import com.paymentservice.dto.analytics.MonthlyVolumeResponse;
 import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
 import com.paymentservice.dto.analytics.PaymentStatusResponse;
@@ -9,6 +10,7 @@ import com.paymentservice.dto.analytics.TopReceiverResponse;
 import com.paymentservice.service.AnalyticsService;
 import com.sentinelpay.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +49,7 @@ public class AnalyticsController {
         return ApiResponse.<AverageAmountResponse>builder()
                 .success(true)
                 .message("Average transaction amount fetched successfully")
-                .data(analyticsService.getAverageTransactionResponse())
+                .data(analyticsService.getAverageTransactionAmount())
                 .timestamp(LocalDateTime.now())
                 .build();
     }
@@ -79,9 +81,14 @@ public class AnalyticsController {
         return ApiResponse.<List<MonthlyVolumeResponse>>builder()
                 .success(true)
                 .message("Monthly payment volume fetched successfully")
-                .data(analyticsService.getMonthly())
+                .data(analyticsService.getMonthlyPaymentVolume())
                 .timestamp(LocalDateTime.now())
                 .build();
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardAnalyticsResponse> getDashboardAnalytics() {
+        return ResponseEntity.ok(analyticsService.getDashboardAnalytics());
     }
 
 }
