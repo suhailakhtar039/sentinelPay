@@ -105,6 +105,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = ANALYTICS, key = "'dashboard'")
     public DashboardAnalyticsResponse getDashboardAnalytics() {
         return DashboardAnalyticsResponse.builder()
                 .overview(getOverviewAnalytics())
