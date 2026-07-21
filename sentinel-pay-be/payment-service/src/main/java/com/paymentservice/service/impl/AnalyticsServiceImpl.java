@@ -2,6 +2,7 @@ package com.paymentservice.service.impl;
 
 import com.paymentservice.dto.analytics.AverageAmountResponse;
 import com.paymentservice.dto.analytics.DailyTransactionResponse;
+import com.paymentservice.dto.analytics.DashboardAnalyticsResponse;
 import com.paymentservice.dto.analytics.MonthlyVolumeResponse;
 import com.paymentservice.dto.analytics.OverviewAnalyticsResponse;
 import com.paymentservice.dto.analytics.PaymentStatusResponse;
@@ -14,6 +15,7 @@ import com.paymentservice.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     @Cacheable(cacheNames = ANALYTICS, key = "'monthly-volume'", sync = true)
-    public List<MonthlyVolumeResponse> getMonthly() {
+    public List<MonthlyVolumeResponse> getMonthlyPaymentVolume() {
         return paymentRepository.getMonthlyTransaction()
                 .stream()
                 .map(projection ->
@@ -96,8 +98,21 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     @Cacheable(cacheNames = ANALYTICS, key = "'average-amount'", sync = true)
-    public AverageAmountResponse getAverageTransactionResponse() {
+    public AverageAmountResponse getAverageTransactionAmount() {
         AverageAmountProjection averageTransaction = paymentRepository.getAverageTransaction();
         return new AverageAmountResponse(averageTransaction.getAverageAmount());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DashboardAnalyticsResponse getDashboardAnalytics() {
+        return DashboardAnalyticsResponse.builder()
+                .overview(getOverviewAnalytics())
+                .averageTransaction(getAverageTransactionAmount())
+                .monthlyVolume(getMonthlyPaymentVolume())
+                .dailyTransactions(getDailyTransactions())
+                .paymentStatusDistribution(getPaymentStatusDistribution())
+                .topReceivers(getTopReceivers())
+                .build();
     }
 }
