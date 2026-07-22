@@ -1,14 +1,15 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { TokenStorageService } from '../../core/services/token-storage';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { DashboardService } from './service/dashboard-service';
-import { DashboardSummary } from './model/dashboard-summary';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
+import { DashboardAnalytics } from './model/dashboard-analytics.model';
+import { DashboardSummary } from './model/dashboard-summary';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,7 +38,6 @@ export class Dashboard {
   constructor(
     private tokenService: TokenStorageService,
     private dashboardService: DashboardService,
-    private cdf: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -53,13 +53,14 @@ export class Dashboard {
     this.dashboardService.getDashboardSummary().subscribe({
       next: (summary) => {
         this.summary = summary;
+
         this.loading = false;
-        this.cdf.detectChanges();
       },
+
       error: () => {
         this.loading = false;
+
         this.errorMessage = 'Unable to load dashboard. Please try again';
-        this.cdf.detectChanges();
       },
     });
   }
