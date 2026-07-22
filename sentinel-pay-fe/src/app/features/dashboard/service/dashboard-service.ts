@@ -7,11 +7,12 @@ import { PaymentService } from '../../payment/services/payment-service';
 import { DashboardSummary } from '../model/dashboard-summary';
 import { DashboardAnalytics } from '../model/dashboard-analytics.model';
 import { PaymentResponse } from '../../payment/model/payment-response';
+import { ApiResponse } from '../../../shared/models/api-response';
 
 interface DashboardApiResponse {
   analytics: DashboardAnalytics;
 
-  payments: PaymentResponse[];
+  payments: ApiResponse<PaymentResponse[]>;
 }
 
 @Injectable({
