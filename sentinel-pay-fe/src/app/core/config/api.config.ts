@@ -4,4 +4,5 @@ export const API_CONFIG = {
   wallet: 'http://localhost:8080/api/wallets',
   payment: 'http://localhost:8080/api/payments',
   ledger: 'http://localhost:8080/api/ledger',
+  analytics: 'http://localhost:8080/api/analytics',
 };
