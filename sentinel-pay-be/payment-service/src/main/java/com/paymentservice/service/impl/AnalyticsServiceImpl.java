@@ -28,10 +28,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'overview'", sync = true)
-    public OverviewAnalyticsResponse getOverviewAnalytics() {
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'overview:' + #userId",
+            sync = true
+    )
+    public OverviewAnalyticsResponse getOverviewAnalytics(Long userId) {
+
         OverviewAnalyticsProjection projection =
-                paymentRepository.getOverviewAnalytics();
+                paymentRepository.getOverviewAnalytics(userId);
 
         return new OverviewAnalyticsResponse(
                 projection.getTotalPayments(),
@@ -44,76 +49,113 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'daily-transactions'", sync = true)
-    public List<DailyTransactionResponse> getDailyTransactions() {
-        return paymentRepository.getDailyTransaction()
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'daily-transactions:' + #userId",
+            sync = true
+    )
+    public List<DailyTransactionResponse> getDailyTransactions(Long userId) {
+
+        return paymentRepository.getDailyTransaction(userId)
                 .stream()
-                .map(dailyTransactionProjection ->
+                .map(projection ->
                         new DailyTransactionResponse(
-                                dailyTransactionProjection.getDate(),
-                                dailyTransactionProjection.getTransactionCount()))
+                                projection.getDate(),
+                                projection.getTransactionCount()
+                        ))
                 .toList();
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'monthly-volume'", sync = true)
-    public List<MonthlyVolumeResponse> getMonthlyPaymentVolume() {
-        return paymentRepository.getMonthlyTransaction()
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'monthly-volume:' + #userId",
+            sync = true
+    )
+    public List<MonthlyVolumeResponse> getMonthlyPaymentVolume(Long userId) {
+
+        return paymentRepository.getMonthlyTransaction(userId)
                 .stream()
                 .map(projection ->
                         new MonthlyVolumeResponse(
                                 projection.getYear(),
                                 projection.getMonth(),
-                                projection.getTotalVolume()))
+                                projection.getTotalVolume()
+                        ))
                 .toList();
-
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'payment-status'", sync = true)
-    public List<PaymentStatusResponse> getPaymentStatusDistribution() {
-        return paymentRepository.getPaymentStatusDistribution()
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'payment-status:' + #userId",
+            sync = true
+    )
+    public List<PaymentStatusResponse> getPaymentStatusDistribution(Long userId) {
+
+        return paymentRepository.getPaymentStatusDistribution(userId)
                 .stream()
-                .map(projection -> new PaymentStatusResponse(
-                        projection.getStatus(),
-                        projection.getCount()
-                ))
-                .toList();
-
-    }
-
-    @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'top-receivers'", sync = true)
-    public List<TopReceiverResponse> getTopReceivers() {
-        List<TopReceiverProjection> topReceivers = paymentRepository.getTopReceivers();
-        return topReceivers
-                .stream()
-                .map(value -> new TopReceiverResponse(
-                        value.getReceiverId(),
-                        value.getTotalReceived(),
-                        value.getTransactionCount()
-                ))
+                .map(projection ->
+                        new PaymentStatusResponse(
+                                projection.getStatus(),
+                                projection.getCount()
+                        ))
                 .toList();
     }
 
     @Override
-    @Cacheable(cacheNames = ANALYTICS, key = "'average-amount'", sync = true)
-    public AverageAmountResponse getAverageTransactionAmount() {
-        AverageAmountProjection averageTransaction = paymentRepository.getAverageTransaction();
-        return new AverageAmountResponse(averageTransaction.getAverageAmount());
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'top-receivers:' + #userId",
+            sync = true
+    )
+    public List<TopReceiverResponse> getTopReceivers(Long userId) {
+
+        List<TopReceiverProjection> topReceivers =
+                paymentRepository.getTopReceivers(userId);
+
+        return topReceivers.stream()
+                .map(value ->
+                        new TopReceiverResponse(
+                                value.getReceiverId(),
+                                value.getTotalReceived(),
+                                value.getTransactionCount()
+                        ))
+                .toList();
+    }
+
+    @Override
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'average-amount:' + #userId",
+            sync = true
+    )
+    public AverageAmountResponse getAverageTransactionAmount(Long userId) {
+
+        AverageAmountProjection projection =
+                paymentRepository.getAverageTransaction(userId);
+
+        return new AverageAmountResponse(
+                projection.getAverageAmount()
+        );
     }
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = ANALYTICS, key = "'dashboard'")
-    public DashboardAnalyticsResponse getDashboardAnalytics() {
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'dashboard:' + #userId",
+            sync = true
+    )
+    public DashboardAnalyticsResponse getDashboardAnalytics(Long userId) {
+
         return DashboardAnalyticsResponse.builder()
-                .overview(getOverviewAnalytics())
-                .averageTransaction(getAverageTransactionAmount())
-                .monthlyVolume(getMonthlyPaymentVolume())
-                .dailyTransactions(getDailyTransactions())
-                .paymentStatusDistribution(getPaymentStatusDistribution())
-                .topReceivers(getTopReceivers())
+                .overview(getOverviewAnalytics(userId))
+                .averageTransaction(getAverageTransactionAmount(userId))
+                .monthlyVolume(getMonthlyPaymentVolume(userId))
+                .dailyTransactions(getDailyTransactions(userId))
+                .paymentStatusDistribution(getPaymentStatusDistribution(userId))
+                .topReceivers(getTopReceivers(userId))
                 .build();
     }
 }

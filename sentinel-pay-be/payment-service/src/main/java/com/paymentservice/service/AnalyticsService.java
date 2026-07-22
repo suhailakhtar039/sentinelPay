@@ -11,17 +11,17 @@ import com.paymentservice.dto.analytics.TopReceiverResponse;
 import java.util.List;
 
 public interface AnalyticsService {
-    OverviewAnalyticsResponse getOverviewAnalytics();
+    DashboardAnalyticsResponse getDashboardAnalytics(Long userId);
 
-    List<DailyTransactionResponse> getDailyTransactions();
+    OverviewAnalyticsResponse getOverviewAnalytics(Long userId);
 
-    List<MonthlyVolumeResponse> getMonthlyPaymentVolume();
+    List<MonthlyVolumeResponse> getMonthlyPaymentVolume(Long userId);
 
-    List<PaymentStatusResponse> getPaymentStatusDistribution();
+    List<DailyTransactionResponse> getDailyTransactions(Long userId);
 
-    List<TopReceiverResponse> getTopReceivers();
+    List<PaymentStatusResponse> getPaymentStatusDistribution(Long userId);
 
-    AverageAmountResponse getAverageTransactionAmount();
+    List<TopReceiverResponse> getTopReceivers(Long userId);
 
-    DashboardAnalyticsResponse getDashboardAnalytics();
+    AverageAmountResponse getAverageTransactionAmount(Long userId);
 }

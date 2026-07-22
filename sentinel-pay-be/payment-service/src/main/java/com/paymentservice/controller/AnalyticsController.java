@@ -11,9 +11,7 @@ import com.paymentservice.service.AnalyticsService;
 import com.sentinelpay.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,73 +20,87 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/analytics")
 public class AnalyticsController {
+
     private final AnalyticsService analyticsService;
 
     @GetMapping("/overview")
-    public ApiResponse<OverviewAnalyticsResponse> getOverviewAnalytics() {
+    public ApiResponse<OverviewAnalyticsResponse> getOverviewAnalytics(
+            @RequestHeader("X-User-Id") Long userId) {
+
         return ApiResponse.<OverviewAnalyticsResponse>builder()
                 .success(true)
-                .message("Overview Analytics fetched successfully")
-                .data(analyticsService.getOverviewAnalytics())
+                .message("Overview analytics fetched successfully")
+                .data(analyticsService.getOverviewAnalytics(userId))
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
     @GetMapping("/payment-status")
-    public ApiResponse<List<PaymentStatusResponse>> getPaymentStatusDistribution() {
+    public ApiResponse<List<PaymentStatusResponse>> getPaymentStatusDistribution(
+            @RequestHeader("X-User-Id") Long userId) {
+
         return ApiResponse.<List<PaymentStatusResponse>>builder()
                 .success(true)
                 .message("Payment status distribution fetched successfully")
-                .data(analyticsService.getPaymentStatusDistribution())
+                .data(analyticsService.getPaymentStatusDistribution(userId))
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
     @GetMapping("/average-amount")
-    public ApiResponse<AverageAmountResponse> getAverageTransactionAmount() {
+    public ApiResponse<AverageAmountResponse> getAverageTransactionAmount(
+            @RequestHeader("X-User-Id") Long userId) {
+
         return ApiResponse.<AverageAmountResponse>builder()
                 .success(true)
                 .message("Average transaction amount fetched successfully")
-                .data(analyticsService.getAverageTransactionAmount())
+                .data(analyticsService.getAverageTransactionAmount(userId))
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
     @GetMapping("/top-receivers")
-    public ApiResponse<List<TopReceiverResponse>> getTopReceivers() {
+    public ApiResponse<List<TopReceiverResponse>> getTopReceivers(
+            @RequestHeader("X-User-Id") Long userId) {
 
         return ApiResponse.<List<TopReceiverResponse>>builder()
                 .success(true)
                 .message("Top receivers fetched successfully")
-                .data(analyticsService.getTopReceivers())
+                .data(analyticsService.getTopReceivers(userId))
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
     @GetMapping("/daily-transactions")
-    public ApiResponse<List<DailyTransactionResponse>> getDailyTransactions() {
+    public ApiResponse<List<DailyTransactionResponse>> getDailyTransactions(
+            @RequestHeader("X-User-Id") Long userId) {
+
         return ApiResponse.<List<DailyTransactionResponse>>builder()
                 .success(true)
                 .message("Daily transactions fetched successfully")
-                .data(analyticsService.getDailyTransactions())
+                .data(analyticsService.getDailyTransactions(userId))
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
     @GetMapping("/monthly-volume")
-    public ApiResponse<List<MonthlyVolumeResponse>> getMonthlyVolume() {
+    public ApiResponse<List<MonthlyVolumeResponse>> getMonthlyPaymentVolume(
+            @RequestHeader("X-User-Id") Long userId) {
 
         return ApiResponse.<List<MonthlyVolumeResponse>>builder()
                 .success(true)
                 .message("Monthly payment volume fetched successfully")
-                .data(analyticsService.getMonthlyPaymentVolume())
+                .data(analyticsService.getMonthlyPaymentVolume(userId))
                 .timestamp(LocalDateTime.now())
                 .build();
     }
 
     @GetMapping("/dashboard")
-    public ResponseEntity<DashboardAnalyticsResponse> getDashboardAnalytics() {
-        return ResponseEntity.ok(analyticsService.getDashboardAnalytics());
-    }
+    public ResponseEntity<DashboardAnalyticsResponse> getDashboardAnalytics(
+            @RequestHeader("X-User-Id") Long userId) {
 
+        return ResponseEntity.ok(
+                analyticsService.getDashboardAnalytics(userId)
+        );
+    }
 }
