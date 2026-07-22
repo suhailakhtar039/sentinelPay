@@ -85,10 +85,18 @@ public class RedisConfig {
     }
 
     @Bean
-    public GenericJackson2JsonRedisSerializer redisSerializer(
-            ObjectMapper objectMapper) {
+    public GenericJackson2JsonRedisSerializer redisSerializer() {
 
-        return new GenericJackson2JsonRedisSerializer(objectMapper);
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.findAndRegisterModules();
+
+        mapper.activateDefaultTyping(
+                mapper.getPolymorphicTypeValidator(),
+                ObjectMapper.DefaultTyping.NON_FINAL
+        );
+
+        return new GenericJackson2JsonRedisSerializer(mapper);
     }
 
     @Bean
