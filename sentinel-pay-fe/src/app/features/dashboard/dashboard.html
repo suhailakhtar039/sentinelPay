@@ -22,10 +22,10 @@
         class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
       >
         <mat-card-content class="p-6">
-          <p class="text-gray-500">Wallet Balance</p>
+          <p class="text-gray-500">Total Volume</p>
 
           <h2 class="text-3xl font-bold mt-2">
-            {{ summary?.walletBalance | currency: 'INR' : 'symbol' : '1.0-0' }}
+            {{ summary?.analytics?.overview?.totalVolume | currency: 'INR' }}
           </h2>
         </mat-card-content>
       </mat-card>
@@ -35,7 +35,10 @@
       >
         <mat-card-content class="p-6">
           <p class="text-gray-500">Total Payments</p>
-          <h2 class="text-3xl font-bold mt-2">{{ summary?.totalPayments }}</h2>
+
+          <h2 class="text-3xl font-bold mt-2">
+            {{ summary?.analytics?.overview?.totalPayments }}
+          </h2>
         </mat-card-content>
       </mat-card>
       <!-- Successful -->
@@ -44,7 +47,9 @@
       >
         <mat-card-content class="p-6">
           <p class="text-gray-500">Successful</p>
-          <h2 class="text-3xl font-bold text-green-600 mt-2">{{ summary?.successfulPayments }}</h2>
+          <h2 class="text-3xl font-bold text-green-600 mt-2">
+            {{ summary?.analytics?.overview?.successfulPayments }}
+          </h2>
         </mat-card-content>
       </mat-card>
       <!-- Failed -->
@@ -54,7 +59,7 @@
         <mat-card-content class="p-6">
           <p class="text-gray-500">Failed</p>
           <h2 class="text-3xl font-bold text-red-600 mt-2">
-            {{ summary?.failedPayments }}
+            {{ summary?.analytics?.overview?.failedPayments }}
           </h2>
         </mat-card-content>
       </mat-card>
