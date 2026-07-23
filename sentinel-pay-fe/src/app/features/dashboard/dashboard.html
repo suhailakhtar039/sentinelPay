@@ -1,7 +1,7 @@
 @if (loading) {
-  <div class="flex justify-center items-center py-10">
-    <mat-spinner [diameter]="50"></mat-spinner>
-    <p class="text-gray-500 text-lg">Loading dashboard...</p>
+  <div class="flex flex-col items-center justify-center py-12 gap-4">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="text-gray-500">Loading your dashboard...</p>
   </div>
 } @else {
   @if (errorMessage.length > 0) {
@@ -22,11 +22,13 @@
         class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
       >
         <mat-card-content class="p-6">
-          <p class="text-gray-500">Money Sent</p>
+          <p class="text-gray-500">Wallet Balance</p>
 
-          <h2 class="text-3xl font-bold mt-2">
-            {{ summary?.analytics?.overview?.totalVolume | currency: 'INR' }}
+          <h2 class="text-3xl font-bold text-green-700 mt-2">
+            {{ summary?.wallet?.balance | currency: 'INR' : 'symbol' : '1.0-0' }}
           </h2>
+
+          <p class="text-xs text-gray-400 mt-2">Available Balance</p>
         </mat-card-content>
       </mat-card>
       <!-- Total Payments -->
@@ -34,10 +36,10 @@
         class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
       >
         <mat-card-content class="p-6">
-          <p class="text-gray-500">Total Payments</p>
+          <p class="text-gray-500">Money Sent</p>
 
           <h2 class="text-3xl font-bold mt-2">
-            {{ summary?.analytics?.overview?.totalPayments }}
+            {{ summary?.analytics?.overview?.totalVolume | currency: 'INR' : 'symbol' : '1.0-0' }}
           </h2>
         </mat-card-content>
       </mat-card>
@@ -46,7 +48,7 @@
         class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
       >
         <mat-card-content class="p-6">
-          <p class="text-gray-500">Successful</p>
+          <p class="text-gray-500">Successful Payments</p>
           <h2 class="text-3xl font-bold text-green-600 mt-2">
             {{ summary?.analytics?.overview?.successfulPayments }}
           </h2>
@@ -57,7 +59,7 @@
         class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
       >
         <mat-card-content class="p-6">
-          <p class="text-gray-500">Failed</p>
+          <p class="text-gray-500">Failed Payments</p>
           <h2 class="text-3xl font-bold text-red-600 mt-2">
             {{ summary?.analytics?.overview?.failedPayments }}
           </h2>
