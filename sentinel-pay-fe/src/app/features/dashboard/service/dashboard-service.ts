@@ -8,6 +8,7 @@ import { DashboardSummary } from '../model/dashboard-summary';
 import { DashboardAnalytics } from '../model/dashboard-analytics.model';
 import { PaymentResponse } from '../../payment/model/payment-response';
 import { ApiResponse } from '../../../shared/models/api-response';
+import { WalletService } from '../../../core/services/wallet-service';
 
 interface DashboardApiResponse {
   analytics: DashboardAnalytics;
@@ -22,12 +23,13 @@ export class DashboardService {
   constructor(
     private analyticsService: AnalyticsService,
     private paymentService: PaymentService,
+    private walletService: WalletService,
   ) {}
 
   getDashboardSummary(): Observable<DashboardSummary> {
     return forkJoin({
       analytics: this.analyticsService.getDashboardAnalytics(),
-
+      wallet: this.walletService.getMyWallet(),
       payments: this.paymentService.getMyPayments(),
     }).pipe(
       map((response) => {
@@ -37,7 +39,7 @@ export class DashboardService {
 
         return {
           analytics: response.analytics,
-
+          wallet: response.wallet.data,
           recentPayments,
         };
       }),
