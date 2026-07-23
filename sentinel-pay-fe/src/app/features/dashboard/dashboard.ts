@@ -8,8 +8,8 @@ import { DashboardService } from './service/dashboard-service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
-import { DashboardAnalytics } from './model/dashboard-analytics.model';
 import { DashboardSummary } from './model/dashboard-summary';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +21,7 @@ import { DashboardSummary } from './model/dashboard-summary';
     MatProgressSpinnerModule,
     MatTableModule,
     MatChipsModule,
+    MatIconModule,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
