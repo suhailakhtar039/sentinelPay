@@ -16,69 +16,138 @@
     </div>
 
     <!-- Statistics -->
+    <!-- Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-      <!-- Wallet -->
+      <!-- Wallet Balance -->
       <mat-card
-        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+        class="border-l-4 border-green-500 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
       >
-        <mat-card-content class="p-6">
-          <p class="text-gray-500">Wallet Balance</p>
+        <mat-card-content class="p-5">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Wallet Balance</p>
 
-          <h2 class="text-3xl font-bold text-green-700 mt-2">
-            {{ summary?.wallet?.balance | currency: 'INR' : 'symbol' : '1.0-0' }}
-          </h2>
+              <h2 class="text-4xl font-bold text-green-700 mt-3">
+                {{ summary?.wallet?.balance | currency: 'INR' : 'symbol' : '1.0-0' }}
+              </h2>
 
-          <p class="text-xs text-gray-400 mt-2">Available Balance</p>
+              <p class="text-xs text-gray-400 mt-3">Available Balance</p>
+            </div>
+
+            <div
+              class="w-12 h-12 rounded-full bg-green-100 text-green-700 flex items-center justify-center"
+            >
+              <mat-icon>account_balance_wallet</mat-icon>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
-      <!-- Total Payments -->
-      <mat-card
-        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-      >
-        <mat-card-content class="p-6">
-          <p class="text-gray-500">Money Sent</p>
 
-          <h2 class="text-3xl font-bold mt-2">
-            {{ summary?.analytics?.overview?.totalVolume | currency: 'INR' : 'symbol' : '1.0-0' }}
-          </h2>
+      <!-- Money Sent -->
+      <mat-card
+        class="border-l-4 border-blue-500 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+      >
+        <mat-card-content class="p-5">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Money Sent</p>
+
+              <h2 class="text-4xl font-bold text-slate-800 mt-3">
+                {{
+                  summary?.analytics?.overview?.totalVolume | currency: 'INR' : 'symbol' : '1.0-0'
+                }}
+              </h2>
+
+              <p class="text-xs text-gray-400 mt-3">Total Completed Transfers</p>
+            </div>
+
+            <div
+              class="w-12 h-12 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center"
+            >
+              <mat-icon>north_east</mat-icon>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
-      <!-- Successful -->
+
+      <!-- Successful Payments -->
       <mat-card
-        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+        class="border-l-4 border-emerald-500 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
       >
-        <mat-card-content class="p-6">
-          <p class="text-gray-500">Successful Payments</p>
-          <h2 class="text-3xl font-bold text-green-600 mt-2">
-            {{ summary?.analytics?.overview?.successfulPayments }}
-          </h2>
+        <mat-card-content class="p-5">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Successful Payments</p>
+
+              <h2 class="text-4xl font-bold text-emerald-600 mt-3">
+                {{ summary?.analytics?.overview?.successfulPayments }}
+              </h2>
+
+              <p class="text-xs text-gray-400 mt-3">Completed Transactions</p>
+            </div>
+
+            <div
+              class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center"
+            >
+              <mat-icon>check_circle</mat-icon>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
-      <!-- Failed -->
+
+      <!-- Failed Payments -->
       <mat-card
-        class="bg-white p-6 transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+        class="border-l-4 border-red-500 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
       >
-        <mat-card-content class="p-6">
-          <p class="text-gray-500">Failed Payments</p>
-          <h2 class="text-3xl font-bold text-red-600 mt-2">
-            {{ summary?.analytics?.overview?.failedPayments }}
-          </h2>
+        <mat-card-content class="p-5">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Failed Payments</p>
+
+              <h2 class="text-4xl font-bold text-red-600 mt-3">
+                {{ summary?.analytics?.overview?.failedPayments }}
+              </h2>
+
+              <p class="text-xs text-gray-400 mt-3">Unsuccessful Transactions</p>
+            </div>
+
+            <div
+              class="w-12 h-12 rounded-full bg-red-100 text-red-700 flex items-center justify-center"
+            >
+              <mat-icon>cancel</mat-icon>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>
     <!-- Quick Actions -->
     <div class="mt-10">
-      <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-      <div class="flex flex-wrap gap-4">
-        <!-- create payment -->
-        <button mat-raised-button color="primary" routerLink="/payments/new">Create Payment</button>
-        <!-- top up -->
-        <button mat-raised-button color="primary" routerLink="/wallet/topup">Top Up Wallet</button>
-        <!-- payment history -->
-        <button mat-raised-button color="primary" routerLink="/payments/history">
-          Payment History
-        </button>
-      </div>
+      <mat-card class="rounded-2xl shadow-sm">
+        <mat-card-content class="p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold">Quick Actions</h2>
+
+            <span class="text-sm text-gray-400"> Frequently Used </span>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+            <button mat-flat-button color="primary" routerLink="/payments/new">
+              <mat-icon>send</mat-icon>
+              Create Payment
+            </button>
+
+            <button mat-flat-button color="primary" routerLink="/wallet/topup">
+              <mat-icon>account_balance_wallet</mat-icon>
+              Top Up Wallet
+            </button>
+
+            <button mat-flat-button color="primary" routerLink="/payments/history">
+              <mat-icon>history</mat-icon>
+              Payment History
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
     <!-- Recent payments -->
     <div class="mt-12">
