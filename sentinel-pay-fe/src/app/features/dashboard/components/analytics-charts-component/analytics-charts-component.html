@@ -50,7 +50,23 @@
   <!-- Top Receivers -->
   <mat-card class="col-span-12 lg:col-span-8 rounded-2xl shadow-sm">
     <mat-card-content class="p-6">
-      <h2 class="text-lg font-semibold mb-6">Top Receivers</h2>
+      <h2 class="text-lg font-semibold mb-1">Top Receivers</h2>
+
+      <p class="text-sm text-gray-500 mb-5">Highest amount received</p>
+
+      <apx-chart
+        [series]="topReceiversChart().series!"
+        [chart]="topReceiversChart().chart!"
+        [plotOptions]="topReceiversChart().plotOptions!"
+        [xaxis]="topReceiversChart().xaxis!"
+        [yaxis]="topReceiversChart().yaxis!"
+        [tooltip]="topReceiversChart().tooltip!"
+        [grid]="topReceiversChart().grid!"
+        [stroke]="topReceiversChart().stroke!"
+        [legend]="topReceiversChart().legend!"
+        [dataLabels]="topReceiversChart().dataLabels!"
+      >
+      </apx-chart>
 
       <!-- Horizontal -->
     </mat-card-content>

@@ -2,7 +2,11 @@ import { Component, computed, input } from '@angular/core';
 import { DashboardAnalytics } from '../../model/dashboard-analytics.model';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { createMonthlyChart, createPaymentStatusChart } from './analytics-charts.config';
+import {
+  createMonthlyChart,
+  createPaymentStatusChart,
+  createTopReceiversChart,
+} from './analytics-charts.config';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
@@ -19,4 +23,6 @@ export class AnalyticsChartsComponent {
   paymentStatusChart = computed(() =>
     createPaymentStatusChart(this.analytics().paymentStatusDistribution),
   );
+
+  topReceiversChart = computed(() => createTopReceiversChart(this.analytics().topReceivers));
 }
