@@ -1,5 +1,6 @@
 import { MonthlyVolume } from '../../model/monthly-volume.model';
-import { AreaChartOptions } from './analytics-charts.type';
+import { PaymentStatus } from '../../model/payment-status.model';
+import { AreaChartOptions, DonutChartOptions } from './analytics-charts.type';
 
 const MONTHS = [
   '',
@@ -83,5 +84,55 @@ export function createMonthlyChart(data: MonthlyVolume[]): Partial<AreaChartOpti
       borderColor: '#E5E7EB',
       strokeDashArray: 5,
     },
+  };
+}
+
+export function createPaymentStatusChart(data: PaymentStatus[]): Partial<DonutChartOptions> {
+  return {
+    series: data.map((s) => s.count),
+
+    labels: data.map((s) => s.status),
+
+    chart: {
+      type: 'donut',
+      height: 320,
+    },
+
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '70%',
+        },
+      },
+    },
+
+    legend: {
+      position: 'bottom',
+      fontSize: '14px',
+    },
+
+    dataLabels: {
+      enabled: false,
+    },
+
+    tooltip: {
+      y: {
+        formatter: (value) => `${value} Payments`,
+      },
+    },
+
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            height: 280,
+          },
+          legend: {
+            position: 'bottom',
+          },
+        },
+      },
+    ],
   };
 }
