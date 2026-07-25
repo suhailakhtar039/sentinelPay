@@ -3,6 +3,7 @@ import { DashboardAnalytics } from '../../model/dashboard-analytics.model';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import {
+  createDailyTransactionsChart,
   createMonthlyChart,
   createPaymentStatusChart,
   createTopReceiversChart,
@@ -25,4 +26,8 @@ export class AnalyticsChartsComponent {
   );
 
   topReceiversChart = computed(() => createTopReceiversChart(this.analytics().topReceivers));
+
+  dailyTransactionChart = computed(() =>
+    createDailyTransactionsChart(this.analytics().dailyTransactions),
+  );
 }

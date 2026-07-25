@@ -75,7 +75,23 @@
   <!-- Daily -->
   <mat-card class="col-span-12 rounded-2xl shadow-sm">
     <mat-card-content class="p-6">
-      <h2 class="text-lg font-semibold mb-6">Daily Transactions</h2>
+      <h2 class="text-lg font-semibold mb-1">Daily Transactions</h2>
+
+      <p class="text-sm text-gray-500 mb-5">Daily transaction count</p>
+
+      <apx-chart
+        [series]="dailyTransactionChart().series!"
+        [chart]="dailyTransactionChart().chart!"
+        [plotOptions]="dailyTransactionChart().plotOptions!"
+        [xaxis]="dailyTransactionChart().xaxis!"
+        [yaxis]="dailyTransactionChart().yaxis!"
+        [tooltip]="dailyTransactionChart().tooltip!"
+        [grid]="dailyTransactionChart().grid!"
+        [stroke]="dailyTransactionChart().stroke!"
+        [legend]="dailyTransactionChart().legend!"
+        [dataLabels]="dailyTransactionChart().dataLabels!"
+      >
+      </apx-chart>
 
       <!-- Bar -->
     </mat-card-content>
