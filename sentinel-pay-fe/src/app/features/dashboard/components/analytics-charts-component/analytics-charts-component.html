@@ -29,9 +29,21 @@
   <!-- Payment Status -->
   <mat-card class="col-span-12 lg:col-span-4 rounded-2xl shadow-sm">
     <mat-card-content class="p-6">
-      <h2 class="text-lg font-semibold mb-6">Payment Status</h2>
+      <h2 class="text-lg font-semibold mb-1">Payment Status</h2>
 
-      <!-- Donut -->
+      <p class="text-sm text-gray-500 mb-5">Distribution of payment outcomes</p>
+
+      <apx-chart
+        [series]="paymentStatusChart().series!"
+        [chart]="paymentStatusChart().chart!"
+        [labels]="paymentStatusChart().labels!"
+        [legend]="paymentStatusChart().legend!"
+        [tooltip]="paymentStatusChart().tooltip!"
+        [plotOptions]="paymentStatusChart().plotOptions!"
+        [responsive]="paymentStatusChart().responsive!"
+        [dataLabels]="paymentStatusChart().dataLabels!"
+      >
+      </apx-chart>
     </mat-card-content>
   </mat-card>
 
