@@ -1,6 +1,11 @@
 import { MonthlyVolume } from '../../model/monthly-volume.model';
 import { PaymentStatus } from '../../model/payment-status.model';
-import { AreaChartOptions, DonutChartOptions } from './analytics-charts.type';
+import { TopReceiver } from '../../model/top-receiver.model';
+import {
+  AreaChartOptions,
+  DonutChartOptions,
+  HorizontalBarChartOptions,
+} from './analytics-charts.type';
 
 const MONTHS = [
   '',
@@ -134,5 +139,71 @@ export function createPaymentStatusChart(data: PaymentStatus[]): Partial<DonutCh
         },
       },
     ],
+  };
+}
+
+export function createTopReceiversChart(data: TopReceiver[]): Partial<HorizontalBarChartOptions> {
+  const sorted = [...data].sort((a, b) => b.totalReceived - a.totalReceived).slice(0, 5);
+
+  return {
+    series: [
+      {
+        name: 'Amount Received',
+        data: sorted.map((receiver) => receiver.totalReceived),
+      },
+    ],
+
+    chart: {
+      type: 'bar',
+      height: 320,
+      toolbar: {
+        show: false,
+      },
+    },
+
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        borderRadius: 6,
+        barHeight: '55%',
+      },
+    },
+
+    dataLabels: {
+      enabled: false,
+    },
+
+    xaxis: {
+      categories: sorted.map((receiver) => `User ${receiver.receiverId}`),
+
+      labels: {
+        formatter: (value) => `₹${Number(value).toLocaleString('en-IN')}`,
+      },
+    },
+
+    yaxis: {
+      title: {
+        text: undefined,
+      },
+    },
+
+    tooltip: {
+      y: {
+        formatter: (value) => `₹${value.toLocaleString('en-IN')}`,
+      },
+    },
+
+    stroke: {
+      width: 1,
+    },
+
+    grid: {
+      borderColor: '#E5E7EB',
+      strokeDashArray: 5,
+    },
+
+    legend: {
+      show: false,
+    },
   };
 }
