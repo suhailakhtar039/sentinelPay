@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { DashboardAnalytics } from '../../model/dashboard-analytics.model';
 
 @Component({
   selector: 'app-analytics-charts-component',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './analytics-charts-component.css',
 })
 export class AnalyticsChartsComponent {
-
+  @Input({ required: true })
+  analytics!: DashboardAnalytics;
 }
