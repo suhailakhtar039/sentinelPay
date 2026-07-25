@@ -40,3 +40,25 @@ export type DonutChartOptions = {
   plotOptions: ApexPlotOptions;
   responsive: ApexResponsive[];
 };
+
+export type HorizontalBarChartOptions = {
+  series: ApexAxisChartSeries;
+
+  chart: ApexChart;
+
+  plotOptions: ApexPlotOptions;
+
+  dataLabels: ApexDataLabels;
+
+  xaxis: ApexXAxis;
+
+  yaxis: ApexYAxis;
+
+  grid: ApexGrid;
+
+  tooltip: ApexTooltip;
+
+  legend: ApexLegend;
+
+  stroke: ApexStroke;
+};
