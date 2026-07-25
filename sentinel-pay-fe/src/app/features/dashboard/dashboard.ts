@@ -10,6 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { DashboardSummary } from './model/dashboard-summary';
 import { MatIconModule } from '@angular/material/icon';
+import { AnalyticsChartsComponent } from './components/analytics-charts-component/analytics-charts-component';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatTableModule,
     MatChipsModule,
     MatIconModule,
+    AnalyticsChartsComponent,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
