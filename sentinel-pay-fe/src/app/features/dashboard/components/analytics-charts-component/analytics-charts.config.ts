@@ -1,8 +1,10 @@
+import { DailyTransaction } from '../../model/daily-transaction.model';
 import { MonthlyVolume } from '../../model/monthly-volume.model';
 import { PaymentStatus } from '../../model/payment-status.model';
 import { TopReceiver } from '../../model/top-receiver.model';
 import {
   AreaChartOptions,
+  ColumnChartOptions,
   DonutChartOptions,
   HorizontalBarChartOptions,
 } from './analytics-charts.type';
@@ -195,6 +197,87 @@ export function createTopReceiversChart(data: TopReceiver[]): Partial<Horizontal
 
     stroke: {
       width: 1,
+    },
+
+    grid: {
+      borderColor: '#E5E7EB',
+      strokeDashArray: 5,
+    },
+
+    legend: {
+      show: false,
+    },
+  };
+}
+
+export function createDailyTransactionsChart(
+  data: DailyTransaction[],
+): Partial<ColumnChartOptions> {
+  // Ensure dates are displayed chronologically
+  const sorted = [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  return {
+    series: [
+      {
+        name: 'Transactions',
+        data: sorted.map((transaction) => transaction.transactionCount),
+      },
+    ],
+
+    chart: {
+      type: 'bar',
+      height: 320,
+      toolbar: {
+        show: false,
+      },
+      animations: {
+        enabled: true,
+        speed: 600,
+      },
+    },
+
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        borderRadius: 6,
+        columnWidth: '45%',
+      },
+    },
+
+    dataLabels: {
+      enabled: false,
+    },
+
+    xaxis: {
+      categories: sorted.map((transaction) =>
+        new Date(transaction.date).toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+        }),
+      ),
+      title: {
+        text: 'Date',
+      },
+    },
+
+    yaxis: {
+      title: {
+        text: 'Transactions',
+      },
+      labels: {
+        formatter: (value) => value.toFixed(0),
+      },
+      decimalsInFloat: 0,
+      forceNiceScale: true,
+    },
+
+    tooltip: {
+      x: {
+        show: true,
+      },
+      y: {
+        formatter: (value) => `${value.toLocaleString()} Transactions`,
+      },
     },
 
     grid: {
