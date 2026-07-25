@@ -10,7 +10,12 @@ import {
   ApexXAxis,
   ApexYAxis,
   ApexTitleSubtitle,
+  ApexNonAxisChartSeries,
+  ApexLegend,
+  ApexPlotOptions,
+  ApexResponsive,
 } from 'ng-apexcharts';
+
 export type AreaChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -23,4 +28,15 @@ export type AreaChartOptions = {
   tooltip: ApexTooltip;
   markers: ApexMarkers;
   title: ApexTitleSubtitle;
+};
+
+export type DonutChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  labels: string[];
+  legend: ApexLegend;
+  dataLabels: ApexDataLabels;
+  tooltip: ApexTooltip;
+  plotOptions: ApexPlotOptions;
+  responsive: ApexResponsive[];
 };
