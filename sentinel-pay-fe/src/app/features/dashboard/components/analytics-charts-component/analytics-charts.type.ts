@@ -43,22 +43,27 @@ export type DonutChartOptions = {
 
 export type HorizontalBarChartOptions = {
   series: ApexAxisChartSeries;
-
   chart: ApexChart;
-
   plotOptions: ApexPlotOptions;
-
   dataLabels: ApexDataLabels;
-
   xaxis: ApexXAxis;
-
   yaxis: ApexYAxis;
-
   grid: ApexGrid;
-
   tooltip: ApexTooltip;
-
   legend: ApexLegend;
+  stroke: ApexStroke;
+};
 
+// column chart
+export type ColumnChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  plotOptions: ApexPlotOptions;
+  dataLabels: ApexDataLabels;
+  xaxis: ApexXAxis;
+  yaxis: ApexYAxis;
+  grid: ApexGrid;
+  tooltip: ApexTooltip;
+  legend: ApexLegend;
   stroke: ApexStroke;
 };
