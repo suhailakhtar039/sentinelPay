@@ -149,6 +149,10 @@
         </mat-card-content>
       </mat-card>
     </div>
+    <!-- Charts -->
+    <app-analytics-charts-component
+      [analytics]="summary!.analytics"
+    ></app-analytics-charts-component>
     <!-- Recent payments -->
     <div class="mt-12">
       <h2 class="text-xl font-semibold mb-4">Recent Payments</h2>
