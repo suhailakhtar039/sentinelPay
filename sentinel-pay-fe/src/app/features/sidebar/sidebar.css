@@ -1,5 +1,8 @@
 :host ::ng-deep .mat-drawer-inner-container {
   background-color: #ebe6e7;
+  display: flex;
+  flex-direction: column;
+  /* overflow: hidden; */
 }
 .active-link {
   background: #dbeafe;
@@ -16,4 +19,8 @@
   display: flex;
   flex-direction: column;
   height: 90%;
+}
+.sidebar-layout {
+  /* Navbar height */
+  height: calc(100vh - 64px);
 }
