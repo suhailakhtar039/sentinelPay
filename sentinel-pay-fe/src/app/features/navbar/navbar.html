@@ -1,20 +1,24 @@
 <mat-toolbar
-  class="h-16 bg-gray-200 border-b border-gray-300 px-6 flex items-center justify-between shadow-sm"
+  class="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between shadow-sm"
 >
-  <!-- Brand -->
+  <!-- Left Section -->
   <div class="flex items-center gap-3">
-    <mat-icon class="text-blue-600">account_balance_wallet</mat-icon>
+    <button mat-icon-button (click)="toggleSidebar()" title="Toggle Sidebar">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-icon class="text-blue-600"> account_balance_wallet </mat-icon>
 
     <span class="text-2xl font-bold tracking-tight"> SentinelPay </span>
   </div>
 
-  <!-- User Info -->
+  <!-- Right Section -->
   <div class="flex items-center gap-3">
     <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-      <mat-icon class="text-blue-700">person</mat-icon>
+      <mat-icon class="text-blue-700"> person </mat-icon>
     </div>
 
-    <div class="flex flex-col items-end">
+    <div class="flex flex-col items-end leading-tight">
       <span class="font-semibold text-gray-800">
         {{ email }}
       </span>
