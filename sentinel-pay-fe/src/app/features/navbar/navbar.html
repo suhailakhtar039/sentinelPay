@@ -1,11 +1,25 @@
-<mat-toolbar class="flex justify-between px-4 bg-gray-200!">
-  <!-- Logo / Brand -->
-  <div class="flex items-center gap-2">
-    <span class="text-xl font-semibold">Sentinel Pay</span>
+<mat-toolbar
+  class="h-16 bg-gray-200 border-b border-gray-300 px-6 flex items-center justify-between shadow-sm"
+>
+  <!-- Brand -->
+  <div class="flex items-center gap-3">
+    <mat-icon class="text-blue-600">account_balance_wallet</mat-icon>
+
+    <span class="text-2xl font-bold tracking-tight"> SentinelPay </span>
   </div>
 
-  <div class="items-center gap-4">
-    <span class="text-xl bold px-2">{{ email }}</span>
-    <button mat-raised-button color="primary" (click)="logout()">Logout</button>
+  <!-- User Info -->
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+      <mat-icon class="text-blue-700">person</mat-icon>
+    </div>
+
+    <div class="flex flex-col items-end">
+      <span class="font-semibold text-gray-800">
+        {{ email }}
+      </span>
+
+      <span class="text-xs text-gray-500"> Logged in </span>
+    </div>
   </div>
 </mat-toolbar>
