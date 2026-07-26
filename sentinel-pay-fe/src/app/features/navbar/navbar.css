@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+button[mat-icon-button] {
+  transition: background-color 0.2s ease;
+}
+
+button[mat-icon-button]:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+mat-icon {
+  vertical-align: middle;
+}

@@ -2,13 +2,14 @@
   background-color: #ebe6e7;
 }
 .active-link {
-  background-color: #dbeafe;
+  background: #dbeafe;
   /* margin: 6px 10px; */
+  color: #2563eb !important;
   font-weight: 600;
 }
 
 .active-link mat-icon {
-  color: white !important;
+  color: #2563eb !important;
 }
 
 .sidebar-container {
