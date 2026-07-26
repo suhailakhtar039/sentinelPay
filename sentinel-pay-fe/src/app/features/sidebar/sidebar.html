@@ -55,18 +55,8 @@
 
   <!-- Main Content -->
   <mat-sidenav-content>
-    <div class="relative h-full">
-      <button
-        mat-icon-button
-        (click)="drawer.toggle()"
-        class="absolute top-4 left-4 z-10 bg-white rounded-full shadow"
-      >
-        <mat-icon class="cursor-pointer" title="Toggle sidebar">menu</mat-icon>
-      </button>
-
-      <div class="p-6">
-        <router-outlet />
-      </div>
+    <div class="p-6">
+      <router-outlet />
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
