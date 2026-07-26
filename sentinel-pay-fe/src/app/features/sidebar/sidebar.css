@@ -1,3 +1,18 @@
 :host ::ng-deep .mat-drawer-inner-container {
   background-color: #ebe6e7;
 }
+.active-link {
+  background-color: #dbeafe;
+  /* margin: 6px 10px; */
+  font-weight: 600;
+}
+
+.active-link mat-icon {
+  color: white !important;
+}
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+}
