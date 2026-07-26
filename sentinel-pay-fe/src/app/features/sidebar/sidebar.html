@@ -1,38 +1,65 @@
 <mat-sidenav-container class="h-screen">
   <!-- Sidebar -->
   <mat-sidenav #drawer mode="side" opened class="w-64">
-    <div class="p-4 text-xl font-bold">🛡️ FinTech Platform</div>
+    <div class="sidebar-container">
+      <!-- Branding -->
+      <div class="px-5 py-6 border-b">
+        <h2 class="text-xl font-bold">SentinelPay</h2>
+        <p class="text-sm text-gray-500">FinTech Platform</p>
+      </div>
 
-    <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
-        <mat-icon matListItemIcon>dashboard</mat-icon>
-        <span matListItemTitle>Dashboard</span>
-      </a>
+      <!-- Navigation -->
+      <mat-nav-list class="px-3 pt-4">
+        <a
+          mat-list-item
+          routerLink="/dashboard"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon matListItemIcon>dashboard</mat-icon>
+          <span matListItemTitle>Dashboard</span>
+        </a>
 
-      <a mat-list-item routerLink="/payments" routerLinkActive="active">
-        <mat-icon matListItemIcon>account_balance</mat-icon>
-        <span matListItemTitle>Payments</span>
-      </a>
+        <a mat-list-item routerLink="/payments" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>payments</mat-icon>
+          <span matListItemTitle>Payments</span>
+        </a>
 
-      <a mat-list-item routerLink="/ledger" routerLinkActive="active">
-        <mat-icon matListItemIcon>checkbook</mat-icon>
-        <span matListItemTitle>Ledger</span>
-      </a>
+        <a mat-list-item routerLink="/ledger" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>receipt_long</mat-icon>
+          <span matListItemTitle>Ledger</span>
+        </a>
 
-      <a mat-list-item routerLink="/profile" routerLinkActive="active">
-        <mat-icon matListItemIcon>account_circle</mat-icon>
-        <span matListItemTitle>Profile</span>
-      </a>
-    </mat-nav-list>
+        <a mat-list-item routerLink="/profile" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>Profile</span>
+        </a>
+      </mat-nav-list>
+
+      <!-- Push logout to bottom -->
+      <div class="flex-grow"></div>
+
+      <div class="p-4 border-t">
+        <button
+          mat-flat-button
+          color="warn"
+          class="w-full flex items-center justify-center gap-2 cursor-pointer"
+          (click)="logout()"
+        >
+          <mat-icon title="Logout">logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
   </mat-sidenav>
 
   <!-- Main Content -->
   <mat-sidenav-content>
-    <button mat-icon-button (click)="drawer.toggle()">
-      <mat-icon class="cursor-pointer">menu</mat-icon>
-    </button>
-
-    <span class="ml-2">SentinelPay</span>
+    <div>
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon class="cursor-pointer">menu</mat-icon>
+      </button>
+    </div>
 
     <div class="p-6">
       <router-outlet />
