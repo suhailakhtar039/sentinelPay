@@ -8,6 +8,7 @@ import { TokenStorageService } from '../../core/services/token-storage';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../core/services/auth';
 import { SessionService } from '../../core/services/session-service';
+import { SidebarService } from '../../core/services/sidebar-service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,6 +23,7 @@ export class Navbar {
     private authService: AuthService,
     private router: Router,
     private sessionService: SessionService,
+    private sidebarService: SidebarService,
   ) {}
   ngOnInit() {
     this.email = this.tokenService.getEmail();
@@ -39,5 +41,9 @@ export class Navbar {
       },
     });
     this.router.navigate(['/login']);
+  }
+
+  toggleSidebar(): void {
+    this.sidebarService.toggle();
   }
 }
