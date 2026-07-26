@@ -39,14 +39,10 @@
       <!-- Push logout to bottom -->
       <div class="flex-grow"></div>
 
-      <div class="p-4 border-t">
-        <button
-          mat-flat-button
-          color="warn"
-          class="w-full flex items-center justify-center gap-2 cursor-pointer"
-          (click)="logout()"
-        >
-          <mat-icon title="Logout">logout</mat-icon>
+      <div class="mt-auto p-3 border-t">
+        <button class="logout-btn" (click)="logout()" title="Logout">
+          <mat-icon>logout</mat-icon>
+
           <span>Logout</span>
         </button>
       </div>

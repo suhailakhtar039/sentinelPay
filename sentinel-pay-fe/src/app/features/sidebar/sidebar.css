@@ -24,3 +24,39 @@
   /* Navbar height */
   height: calc(100vh - 64px);
 }
+.logout-btn {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 16px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: #dc2626;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.logout-btn mat-icon {
+  color: inherit;
+}
+
+.logout-btn:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.logout-btn:active {
+  transform: scale(0.98);
+}
