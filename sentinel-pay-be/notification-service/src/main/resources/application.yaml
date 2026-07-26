@@ -2,5 +2,21 @@ spring:
   application:
     name: notification-service
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/sentinelpay
+    username: root
+    password: suhail
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
 server:
   port: 8085
