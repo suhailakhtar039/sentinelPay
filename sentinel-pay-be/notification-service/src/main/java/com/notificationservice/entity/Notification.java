@@ -1,8 +1,8 @@
 package com.notificationservice.entity;
 
-import com.notificationservice.dtos.NotificationChannel;
-import com.notificationservice.dtos.NotificationStatus;
-import com.notificationservice.dtos.NotificationType;
+import com.notificationservice.dto.NotificationChannel;
+import com.notificationservice.dto.NotificationStatus;
+import com.notificationservice.dto.NotificationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

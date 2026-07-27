@@ -1,4 +1,4 @@
-package com.notificationservice.dtos;
+package com.notificationservice.dto;
 
 public enum NotificationChannel {
     EMAIL,

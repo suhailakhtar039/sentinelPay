@@ -1,6 +1,6 @@
 package com.notificationservice.repo;
 
-import com.notificationservice.dtos.NotificationStatus;
+import com.notificationservice.dto.NotificationStatus;
 import com.notificationservice.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
