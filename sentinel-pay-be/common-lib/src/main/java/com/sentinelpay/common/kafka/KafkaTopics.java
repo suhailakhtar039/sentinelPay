@@ -21,4 +21,8 @@ public class KafkaTopics {
 
     public static final String FRAUD_REJECTED =
             "fraud-rejected";
+
+    public static final String NOTIFICATION_REQUEST =
+            "notification.request";
+
 }
