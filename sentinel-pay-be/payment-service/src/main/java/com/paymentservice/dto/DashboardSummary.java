@@ -13,18 +13,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class DashboardSummary {
     private Long totalTransactions;
-
     private BigDecimal totalVolume;
-
-    private BigDecimal totalSent;
-
-    private BigDecimal totalReceived;
-
     private BigDecimal averageTransactionAmount;
-
     private Long successfulTransactions;
-
     private Long failedTransactions;
-
-    private BigDecimal currentWalletBalance;
+    private Long pendingTransactions;
 }
