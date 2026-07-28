@@ -18,16 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 public class DashboardResponse {
     private DashboardSummary summary;
-
-    private List<RecentPaymentResponse> recentPayments;
-
-    private DailyTransactionResponse dailyTransactions;
-
-    private MonthlyVolumeResponse monthlyVolume;
-
-    private PaymentStatusResponse paymentStatus;
-
-    private TopReceiverResponse topReceivers;
-
+    private List<PaymentResponse> recentPayments;
+    private List<DailyTransactionResponse> dailyTransactions;
+    private List<MonthlyVolumeResponse> monthlyVolume;
+    private List<PaymentStatusResponse> paymentStatus;
+    private List<TopReceiverResponse> topReceivers;
     private AverageAmountResponse averageAmount;
 }
