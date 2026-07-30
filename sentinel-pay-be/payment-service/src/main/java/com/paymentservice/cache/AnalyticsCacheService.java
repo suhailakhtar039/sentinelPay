@@ -1,4 +1,6 @@
 package com.paymentservice.cache;
 
-public class AnalyticsCacheService {
+public interface AnalyticsCacheService {
+    void evictUserAnalytics(Long userId);
+    void evictAllAnalytics();
 }
