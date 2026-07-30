@@ -68,11 +68,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-//    @Cacheable(
-//            cacheNames = ANALYTICS,
-//            key = "'monthly-volume:' + #userId",
-//            sync = true
-//    )
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'monthly-volume:' + #userId",
+            sync = true
+    )
     public List<MonthlyVolumeResponse> getMonthlyPaymentVolume(Long userId) {
 
         return paymentRepository.getMonthlyTransaction(userId)
@@ -83,15 +83,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                                 projection.getMonth(),
                                 projection.getTotalVolume()
                         ))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
-//    @Cacheable(
-//            cacheNames = ANALYTICS,
-//            key = "'payment-status:' + #userId",
-//            sync = true
-//    )
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'payment-status:' + #userId",
+            sync = true
+    )
     public List<PaymentStatusResponse> getPaymentStatusDistribution(Long userId) {
 
         return paymentRepository.getPaymentStatusDistribution(userId)
@@ -101,15 +101,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                                 projection.getStatus(),
                                 projection.getCount()
                         ))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
-//    @Cacheable(
-//            cacheNames = ANALYTICS,
-//            key = "'top-receivers:' + #userId",
-//            sync = true
-//    )
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'top-receivers:' + #userId",
+            sync = true
+    )
     public List<TopReceiverResponse> getTopReceivers(Long userId) {
 
         List<TopReceiverProjection> topReceivers =
@@ -122,15 +122,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                                 value.getTotalReceived(),
                                 value.getTransactionCount()
                         ))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
-//    @Cacheable(
-//            cacheNames = ANALYTICS,
-//            key = "'average-amount:' + #userId",
-//            sync = true
-//    )
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'average-amount:' + #userId",
+            sync = true
+    )
     public AverageAmountResponse getAverageTransactionAmount(Long userId) {
 
         AverageAmountProjection projection =
@@ -143,11 +143,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     @Transactional(readOnly = true)
-//    @Cacheable(
-//            cacheNames = ANALYTICS,
-//            key = "'dashboard:' + #userId",
-//            sync = true
-//    )
+    @Cacheable(
+            cacheNames = ANALYTICS,
+            key = "'dashboard:' + #userId",
+            sync = true
+    )
     public DashboardAnalyticsResponse getDashboardAnalytics(Long userId) {
 
         return DashboardAnalyticsResponse.builder()
