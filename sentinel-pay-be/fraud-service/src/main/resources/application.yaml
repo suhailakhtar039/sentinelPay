@@ -1,6 +1,9 @@
+server:
+  port: ${SERVER_PORT:8084}
+
 spring:
   application:
     name: fraud-service
 
-server:
-  port: 8084
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 spring:
   application:
@@ -9,41 +9,40 @@ spring:
     gateway:
       server:
         webflux:
-
           routes:
 
             - id: auth-service
-              uri: http://localhost:8081
+              uri: ${AUTH_SERVICE_URL}
               predicates:
                 - Path=/api/auth/**
 
             - id: auth-service-user
-              uri: http://localhost:8081
+              uri: ${AUTH_SERVICE_URL}
               predicates:
                 - Path=/api/users/**
 
             - id: wallet-service
-              uri: http://localhost:8082
+              uri: ${WALLET_SERVICE_URL}
               predicates:
                 - Path=/api/wallets/**
 
             - id: payment-service
-              uri: http://localhost:8083
+              uri: ${PAYMENT_SERVICE_URL}
               predicates:
                 - Path=/api/payments/**
 
             - id: payment-service-user
-              uri: http://localhost:8083
+              uri: ${PAYMENT_SERVICE_URL}
               predicates:
                 - Path=/api/analytics/**
 
             - id: payment-service-dashboard
-              uri: http://localhost:8083
+              uri: ${PAYMENT_SERVICE_URL}
               predicates:
                 - Path=/api/dashboard/**
 
             - id: ledger-service
-              uri: http://localhost:8086
+              uri: ${LEDGER_SERVICE_URL}
               predicates:
                 - Path=/api/ledger/**
 
@@ -51,7 +50,7 @@ spring:
             cors-configurations:
               '[/**]':
                 allowedOrigins:
-                  - "http://localhost:4200"
+                  - ${FRONTEND_URL:http://localhost:4200}
                 allowedMethods:
                   - GET
                   - POST
@@ -64,4 +63,4 @@ spring:
 
 auth:
   service:
-    url: http://localhost:8081
+    url: ${AUTH_SERVICE_URL}

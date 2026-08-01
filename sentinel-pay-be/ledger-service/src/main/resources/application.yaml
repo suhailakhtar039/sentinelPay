@@ -1,11 +1,14 @@
+server:
+  port: ${SERVER_PORT:8086}
+
 spring:
   application:
     name: ledger-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/sentinelpay
-    username: root
-    password: suhail
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -17,8 +20,5 @@ spring:
       hibernate:
         format_sql: true
 
-
-
-
-server:
-  port: 8086
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
