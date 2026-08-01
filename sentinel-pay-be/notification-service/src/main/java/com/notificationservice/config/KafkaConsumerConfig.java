@@ -25,19 +25,10 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, Object> consumerFactory(
             KafkaProperties kafkaProperties) {
 
-        JsonDeserializer<Object> deserializer =
-                new JsonDeserializer<>();
-
-        deserializer.addTrustedPackages(
-                "com.sentinelpay.common.event"
-        );
-
-        deserializer.setUseTypeMapperForKey(false);
-
         return new DefaultKafkaConsumerFactory<>(
                 kafkaProperties.buildConsumerProperties(),
                 new StringDeserializer(),
-                deserializer
+                new JsonDeserializer<>()
         );
     }
 
@@ -47,8 +38,7 @@ public class KafkaConsumerConfig {
             ConsumerFactory<String, Object> consumerFactory,
             DefaultErrorHandler errorHandler) {
 
-        ConcurrentKafkaListenerContainerFactory<String, Object>
-                factory =
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
