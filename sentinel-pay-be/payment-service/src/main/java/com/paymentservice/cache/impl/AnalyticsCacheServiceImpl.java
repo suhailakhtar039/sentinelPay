@@ -28,7 +28,6 @@ public class AnalyticsCacheServiceImpl implements AnalyticsCacheService {
         cache.evict("payment-status:" + userId);
         cache.evict("top-receivers:" + userId);
         cache.evict("average-amount:" + userId);
-        cache.evict("dashboard:" + userId);
     }
 
     @Override
