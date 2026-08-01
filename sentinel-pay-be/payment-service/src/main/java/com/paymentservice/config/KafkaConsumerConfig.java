@@ -1,8 +1,8 @@
 package com.paymentservice.config;
 
-import com.sentinelpay.common.event.PaymentCompletedEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -18,6 +18,12 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
+
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     @Bean
     public DefaultErrorHandler errorHandler() {
         return new DefaultErrorHandler(
@@ -28,21 +34,24 @@ public class KafkaConsumerConfig {
     @Bean
     public ConsumerFactory<String, Object> consumerFactory() {
 
-        JsonDeserializer<Object> deserializer =
-                new JsonDeserializer<>();
-
+        JsonDeserializer<Object> deserializer = new JsonDeserializer<>();
         deserializer.addTrustedPackages("*");
 
         Map<String, Object> props = new HashMap<>();
 
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "localhost:9092"
+                bootstrapServers
         );
 
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                "payment-group"
+                groupId
+        );
+
+        props.put(
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+                "earliest"
         );
 
         return new DefaultKafkaConsumerFactory<>(
@@ -54,15 +63,16 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Object>
-    kafkaListenerContainerFactory() {
+    kafkaListenerContainerFactory(
+            ConsumerFactory<String, Object> consumerFactory,
+            DefaultErrorHandler errorHandler
+    ) {
 
-        ConcurrentKafkaListenerContainerFactory<String, Object>
-                factory =
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
-        factory.setConsumerFactory(
-                consumerFactory()
-        );
+        factory.setConsumerFactory(consumerFactory);
+        factory.setCommonErrorHandler(errorHandler);
 
         return factory;
     }

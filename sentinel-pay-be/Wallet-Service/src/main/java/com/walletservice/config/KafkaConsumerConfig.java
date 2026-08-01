@@ -4,6 +4,7 @@ import com.sentinelpay.common.event.PaymentInitiatedEvent;
 import com.sentinelpay.common.event.UserRegisteredEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -18,13 +19,21 @@ import java.util.Map;
 
 @Configuration
 public class KafkaConsumerConfig {
+
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
+
+    @Value("${wallet.kafka.user-group}")
+    private String userGroup;
+
+    @Value("${wallet.kafka.payment-group}")
+    private String paymentGroup;
+
     @Bean
     public DefaultErrorHandler errorHandler() {
-        FixedBackOff backOff = new FixedBackOff(
-                2000L,
-                3
+        return new DefaultErrorHandler(
+                new FixedBackOff(2000L, 3)
         );
-        return new DefaultErrorHandler(backOff);
     }
 
     @Bean
@@ -39,12 +48,17 @@ public class KafkaConsumerConfig {
 
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "localhost:9092"
+                bootstrapServers
         );
 
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                "wallet-user-group"
+                userGroup
+        );
+
+        props.put(
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+                "earliest"
         );
 
         return new DefaultKafkaConsumerFactory<>(
@@ -62,6 +76,7 @@ public class KafkaConsumerConfig {
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(userConsumerFactory());
+        factory.setCommonErrorHandler(errorHandler());
 
         return factory;
     }
@@ -78,12 +93,17 @@ public class KafkaConsumerConfig {
 
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "localhost:9092"
+                bootstrapServers
         );
 
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                "wallet-payment-group"
+                paymentGroup
+        );
+
+        props.put(
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+                "earliest"
         );
 
         return new DefaultKafkaConsumerFactory<>(
@@ -101,8 +121,8 @@ public class KafkaConsumerConfig {
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(paymentConsumerFactory());
+        factory.setCommonErrorHandler(errorHandler());
 
         return factory;
     }
-
 }
