@@ -1,21 +1,62 @@
-version: '3.8'
-
 services:
+
+  ############################################################
+  # MySQL
+  ############################################################
+
+  mysql:
+    image: mysql:8.4
+
+    container_name: mysql
+
+    restart: unless-stopped
+
+    ports:
+      - "3306:3306"
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: sentinelpay
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # ZooKeeper
+  ############################################################
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
+
     container_name: zookeeper
+
+    restart: unless-stopped
+
+    ports:
+      - "2181:2181"
 
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-    ports:
-      - "2181:2181"
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Kafka
+  ############################################################
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
+
     container_name: kafka
+
+    restart: unless-stopped
 
     depends_on:
       - zookeeper
@@ -25,23 +66,246 @@ services:
 
     environment:
       KAFKA_BROKER_ID: 1
+
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Redis
+  ############################################################
 
   redis:
     image: redis:7.2-alpine
-    container_name: redis
 
-    ports:
-      - "6379:6379"
+    container_name: redis
 
     restart: unless-stopped
 
     command: redis-server --appendonly yes
 
+    ports:
+      - "6379:6379"
+
     volumes:
       - redis-data:/data
 
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Auth Service
+  ############################################################
+
+  auth-service:
+    image: sentinelpay/auth-service:1.0
+
+    container_name: auth-service
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      - mysql
+      - kafka
+      - redis
+
+    ports:
+      - "8081:8081"
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Wallet Service
+  ############################################################
+
+  wallet-service:
+    image: sentinelpay/wallet-service:1.0
+
+    container_name: wallet-service
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      - mysql
+      - kafka
+      - redis
+
+    ports:
+      - "8082:8082"
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Payment Service
+  ############################################################
+
+  payment-service:
+    image: sentinelpay/payment-service:1.0
+
+    container_name: payment-service
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      - mysql
+      - kafka
+      - redis
+
+    ports:
+      - "8083:8083"
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Fraud Service
+  ############################################################
+
+  fraud-service:
+    image: sentinelpay/fraud-service:1.0
+
+    container_name: fraud-service
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      - kafka
+
+    ports:
+      - "8084:8084"
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Notification Service
+  ############################################################
+
+  notification-service:
+    image: sentinelpay/notification-service:1.0
+
+    container_name: notification-service
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      - mysql
+      - kafka
+
+    ports:
+      - "8085:8085"
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # Ledger Service
+  ############################################################
+
+  ledger-service:
+    image: sentinelpay/ledger-service:1.0
+
+    container_name: ledger-service
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      - mysql
+      - kafka
+
+    ports:
+      - "8086:8086"
+
+    networks:
+      - sentinelpay-network
+
+
+  ############################################################
+  # API Gateway
+  ############################################################
+
+  api-gateway:
+    image: sentinelpay/api-gateway:1.0
+
+    container_name: api-gateway
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      - auth-service
+      - wallet-service
+      - payment-service
+      - fraud-service
+      - notification-service
+      - ledger-service
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - sentinelpay-network
+
+
+############################################################
+# Volumes
+############################################################
+
 volumes:
+
+  mysql-data:
+
   redis-data:
+
+
+############################################################
+# Network
+############################################################
+
+networks:
+
+  sentinelpay-network:
+
+    driver: bridge
