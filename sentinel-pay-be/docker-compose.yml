@@ -21,7 +21,7 @@ services:
       - mysql-data:/var/lib/mysql
 
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -54,7 +54,11 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
     healthcheck:
-      test: ["CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "bash -c '</dev/tcp/localhost/2181' || exit 1"
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -136,7 +140,7 @@ services:
       - redis-data:/data
 
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 10
