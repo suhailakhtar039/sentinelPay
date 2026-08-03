@@ -1,8 +1,10 @@
+import { BASE_URL } from './base-url';
+
 export const API_CONFIG = {
-  auth: 'http://localhost:8080/api/auth',
-  user: 'http://localhost:8080/api/users',
-  wallet: 'http://localhost:8080/api/wallets',
-  payment: 'http://localhost:8080/api/payments',
-  ledger: 'http://localhost:8080/api/ledger',
-  analytics: 'http://localhost:8080/api/analytics',
+  auth: `${BASE_URL}/auth`,
+  user: `${BASE_URL}/users`,
+  wallet: `${BASE_URL}/wallets`,
+  payment: `${BASE_URL}/payments`,
+  ledger: `${BASE_URL}/ledger`,
+  analytics: `${BASE_URL}/analytics`,
 };
