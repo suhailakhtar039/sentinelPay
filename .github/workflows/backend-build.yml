@@ -1,0 +1,93 @@
+name: Backend Build
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: sentinel-pay-be
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      ###################################################
+      # Build Common Library
+      ###################################################
+
+      - name: Build common-lib
+        working-directory: sentinel-pay-be/common-lib
+        run: mvn clean install -DskipTests
+
+      ###################################################
+      # Build Auth Service
+      ###################################################
+
+      - name: Build auth-service
+        working-directory: sentinel-pay-be/auth-service
+        run: mvn clean package -DskipTests
+
+      ###################################################
+      # Build Wallet Service
+      ###################################################
+
+      - name: Build Wallet-Service
+        working-directory: sentinel-pay-be/Wallet-Service
+        run: mvn clean package -DskipTests
+
+      ###################################################
+      # Build Payment Service
+      ###################################################
+
+      - name: Build payment-service
+        working-directory: sentinel-pay-be/payment-service
+        run: mvn clean package -DskipTests
+
+      ###################################################
+      # Build Fraud Service
+      ###################################################
+
+      - name: Build fraud-service
+        working-directory: sentinel-pay-be/fraud-service
+        run: mvn clean package -DskipTests
+
+      ###################################################
+      # Build Notification Service
+      ###################################################
+
+      - name: Build notification-service
+        working-directory: sentinel-pay-be/notification-service
+        run: mvn clean package -DskipTests
+
+      ###################################################
+      # Build Ledger Service
+      ###################################################
+
+      - name: Build ledger-service
+        working-directory: sentinel-pay-be/ledger-service
+        run: mvn clean package -DskipTests
+
+      ###################################################
+      # Build API Gateway
+      ###################################################
+
+      - name: Build api-gateway
+        working-directory: sentinel-pay-be/api-gateway
+        run: mvn clean package -DskipTests
