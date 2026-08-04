@@ -395,7 +395,7 @@ services:
   # Frontend
   ############################################################
 
-  frontend:
+  front
     image: sentinelpay/frontend:1.0
 
     container_name: frontend
