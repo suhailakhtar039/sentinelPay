@@ -1,4 +1,4 @@
-name: Docker Build
+name: Backend CI/CD
 
 on:
   push:
@@ -6,12 +6,21 @@ on:
       - master
 
 jobs:
-  docker-build:
+  backend-build:
     runs-on: ubuntu-latest
 
     steps:
+
+      ####################################################
+      # Checkout
+      ####################################################
+
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      ####################################################
+      # Setup Java
+      ####################################################
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
@@ -61,33 +70,81 @@ jobs:
         run: mvn clean package -DskipTests
 
       ####################################################
-      # Build Docker Images
+      # Login to Docker Hub
       ####################################################
 
-      - name: Build Auth Image
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      ####################################################
+      # Build & Push Auth Image
+      ####################################################
+
+      - name: Build & Push Auth Image
         working-directory: sentinel-pay-be/auth-service
-        run: docker build -t auth-service .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/auth-service:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
 
-      - name: Build Wallet Image
+      ####################################################
+      # Build & Push Wallet Image
+      ####################################################
+
+      - name: Build & Push Wallet Image
         working-directory: sentinel-pay-be/Wallet-Service
-        run: docker build -t wallet-service .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/wallet-service:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/wallet-service:latest
 
-      - name: Build Payment Image
+      ####################################################
+      # Build & Push Payment Image
+      ####################################################
+
+      - name: Build & Push Payment Image
         working-directory: sentinel-pay-be/payment-service
-        run: docker build -t payment-service .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/payment-service:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/payment-service:latest
 
-      - name: Build Fraud Image
+      ####################################################
+      # Build & Push Fraud Image
+      ####################################################
+
+      - name: Build & Push Fraud Image
         working-directory: sentinel-pay-be/fraud-service
-        run: docker build -t fraud-service .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/fraud-service:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/fraud-service:latest
 
-      - name: Build Notification Image
+      ####################################################
+      # Build & Push Notification Image
+      ####################################################
+
+      - name: Build & Push Notification Image
         working-directory: sentinel-pay-be/notification-service
-        run: docker build -t notification-service .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/notification-service:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/notification-service:latest
 
-      - name: Build Ledger Image
+      ####################################################
+      # Build & Push Ledger Image
+      ####################################################
+
+      - name: Build & Push Ledger Image
         working-directory: sentinel-pay-be/ledger-service
-        run: docker build -t ledger-service .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/ledger-service:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/ledger-service:latest
 
-      - name: Build API Gateway Image
+      ####################################################
+      # Build & Push API Gateway Image
+      ####################################################
+
+      - name: Build & Push API Gateway Image
         working-directory: sentinel-pay-be/api-gateway
-        run: docker build -t api-gateway .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/api-gateway:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/api-gateway:latest
