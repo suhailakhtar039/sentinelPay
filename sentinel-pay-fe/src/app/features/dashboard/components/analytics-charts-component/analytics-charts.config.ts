@@ -240,7 +240,7 @@ export function createDailyTransactionsChart(
       bar: {
         horizontal: false,
         borderRadius: 6,
-        columnWidth: '45%',
+        columnWidth: '46%',
       },
     },
 
